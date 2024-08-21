@@ -1,0 +1,6 @@
+.prettierrc
+.eslintrc.json
+/dist/*
+node_modules/*
+.husky/*
+.vscode/*
