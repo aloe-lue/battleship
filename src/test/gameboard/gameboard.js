@@ -1,83 +1,97 @@
 import Ships from '../ships/ships';
 
 const Gameboard = () => {
+  const shipPlace = [];
+
   const findLetter = (letters, y) => {
     const chars = letters;
+    const vert = y;
 
     let yAxes = 0;
     for (let j = 0; j < chars.length; j += 1) {
-      if (y === chars[j]) {
+      if (vert === chars[j]) {
         yAxes = j;
       }
     }
     return yAxes;
   };
 
-  const findNumber = (vertical, x) => {
-    let xAxes = 0;
+  const findNumber = (numbers, x) => {
+    const num = numbers;
+    const hort = x;
 
-    for (let k = 0; k < vertical.length; k += 1) {
-      if (x === vertical[k]) {
+    let xAxes = 0;
+    for (let k = 0; k < num.length; k += 1) {
+      if (hort === num[k]) {
         xAxes = k;
       }
     }
     return xAxes;
   };
 
-  const placeShip = (ship, coordinate, horizontalOrVertical) => {
-    const ships = Ships();
-    const shipName = ship;
-    const shipsLength = ships.ships[shipName].length;
+  const shipPlacement = (ship, coordinate, axis) => {
+    const fleet = Ships();
     const [x, y] = coordinate;
-    const array = [[x, y]];
+    const shipName = ship;
+    const shipLength = fleet.ships[shipName].length;
 
-    if (
-      shipName === 'destroyer' &&
-      x === 9 &&
-      y === 'e' &&
-      horizontalOrVertical === 'horizontal'
-    ) {
-      return "don't put ship on top of each other";
-    }
-
-    if (
-      shipName === 'carrier' &&
-      x === 1 &&
-      y === 'e' &&
-      horizontalOrVertical === 'vertical'
-    ) {
-      return "don't put ship on top of each other";
-    }
-
-    for (let i = 1; i < shipsLength; i += 1) {
+    const coordinates = [[x, y]];
+    for (let i = 1; i < shipLength; i += 1) {
+      const xy = axis;
       const horizontal = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
       const vertical = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-      const xy = horizontalOrVertical;
       let letterFind = findLetter(horizontal, y);
       let numberFind = findNumber(vertical, x);
 
       if (xy === 'horizontal') {
-        array[i] = [x, horizontal[(letterFind += i)]];
+        coordinates[i] = [x, horizontal[(letterFind += i)]];
       }
 
       if (xy === 'vertical') {
-        array[i] = [vertical[(numberFind += i)], y];
+        coordinates[i] = [vertical[(numberFind += i)], y];
       }
     }
 
-    /**
-     * ? when it comes to overlapping ships you may want to check if the ships already have
-     * ? that space after finding out it's coordinates
-     * TODO: instruction
-     *    * you want to find all ships that already have coordinate properties
-     *    * check the finished coordinates and match each it with the rest of ships that
-     *    * already have placed
-     *    * if it does contains coordinates return 'don\'t put ship on top of each other'
-     *    * otherwise
-     */
+    return coordinates;
+  };
 
-    ships.ships[shipName].coordinates = array;
-    return { [shipName]: { coordinates: array } };
+  const allowShipPlacement = (coordinate, placedShip) => {
+    const coor = coordinate;
+    const shipLocation = placedShip;
+    let allow = true;
+
+    for (let i = 0; i < coor.length; i += 1) {
+      const [x, y] = coor[i];
+
+      for (let j = 0; j < shipLocation.length; j += 1) {
+        const element = shipLocation[j].coordinates;
+
+        for (let k = 0; k < element.length; k += 1) {
+          const [a, b] = element[k];
+
+          if (x === a && y === b) {
+            allow = false;
+          }
+        }
+      }
+    }
+
+    return allow;
+  };
+
+  const placeShip = (ship, coordinate, axis) => {
+    const shipName = ship;
+    const [x, y] = coordinate;
+
+    const coordinates = shipPlacement(shipName, [x, y], axis);
+    const placeIt = allowShipPlacement(coordinates, shipPlace);
+
+    if (placeIt === true) {
+      shipPlace.push({ ship, coordinates });
+      return shipPlace;
+    }
+
+    return "don't put ship on top of each other";
   };
 
   const receiveAttack = () => {
