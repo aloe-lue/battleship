@@ -2,6 +2,7 @@ import Ships from '../ships/ships';
 
 const Gameboard = () => {
   const shipPlace = [];
+  const ships = Ships();
 
   const findLetter = (letters, y) => {
     const chars = letters;
@@ -94,13 +95,27 @@ const Gameboard = () => {
     return "don't put ship on top of each other";
   };
 
-  const receiveAttack = () => {
-    /**
-     * todo: instruction down
-     * Gameboards should have a receiveAttack function that takes a pair of coordinates,
-     * determines whether or not the attack hit a ship and then sends the ‘hit’ function
-     * to the correct ship, or records the coordinates of the missed shot.
-     */
+  const missedShot = [];
+
+  const receiveAttack = (coordinates) => {
+    const [x, y] = coordinates;
+    const shipLocation = shipPlace;
+
+    for (let i = 0; i < shipLocation.length; i += 1) {
+      const element = shipLocation[i].coordinates;
+
+      for (let j = 0; j < element.length; j += 1) {
+        const [a, b] = element[j];
+        const { ship } = shipLocation[i];
+
+        if (a === x && y === b) {
+          ships.hit(ship);
+          return ship;
+        }
+      }
+    }
+    missedShot.push([x, y]);
+    return ships;
   };
 
   const missedAttacks = () => {
@@ -116,6 +131,8 @@ const Gameboard = () => {
   };
 
   return {
+    ships,
+    missedShot,
     placeShip,
     receiveAttack,
     missedAttacks,
