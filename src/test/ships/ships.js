@@ -23,6 +23,7 @@ const Ships = () => {
   };
 
   return {
+    ships,
     getShipStatus,
     hit,
     isSunk,
