@@ -108,3 +108,25 @@ describe('placing ship on top of another ship is not allowed', () => {
     );
   });
 });
+
+describe('receive attack', () => {
+  test('carrier got hit', () => {
+    gameboard.receiveAttack([2, 'b']);
+    expect(gameboard.ships.getShipStatus('carrier').hits).toEqual(1);
+  });
+
+  test('destroyer got hit', () => {
+    gameboard.receiveAttack([9, 'f']);
+    expect(gameboard.ships.getShipStatus('destroyer').hits).toEqual(1);
+  });
+
+  test('missed shot', () => {
+    gameboard.receiveAttack([1, 'a']);
+    expect(gameboard.missedShot.at(0)).toEqual([1, 'a']);
+  });
+
+  test('missed shot', () => {
+    gameboard.receiveAttack([3, 'g']);
+    expect(gameboard.missedShot.at(1)).toEqual([3, 'g']);
+  });
+});
