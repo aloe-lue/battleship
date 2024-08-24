@@ -56,6 +56,8 @@ const Gameboard = () => {
     return coordinates;
   };
 
+  // ! -> you wouldn't want ship to go over the gameboard
+
   const allowShipPlacement = (coordinate, placedShip) => {
     const coor = coordinate;
     const shipLocation = placedShip;
@@ -118,16 +120,25 @@ const Gameboard = () => {
     return ships;
   };
 
-  const missedAttacks = () => {
-    /**
-     *  Gameboards should keep track of missed attacks so they can display them properly.
-     */
+  const keepTrackMissedAttack = (P2gameboard) => {
+    const missedAttacks = P2gameboard.missedShot;
+    return missedAttacks;
   };
 
-  const reportShipSunk = () => {
-    /**
-     * Gameboards should be able to report whether or not all of their ships have been sunk.
-     */
+  const getShipSunk = (gameboard) => {
+    const oppGameboard = gameboard;
+    const allShips = [
+      'carrier',
+      'battleship',
+      'cruise',
+      'submarine',
+      'destroyer',
+    ];
+    allShips.map((element) => oppGameboard.ships.isSunk(element));
+
+    return allShips.map(
+      (element) => oppGameboard.ships.getShipStatus(element).sunk,
+    );
   };
 
   return {
@@ -135,8 +146,8 @@ const Gameboard = () => {
     missedShot,
     placeShip,
     receiveAttack,
-    missedAttacks,
-    reportShipSunk,
+    keepTrackMissedAttack,
+    getShipSunk,
   };
 };
 
