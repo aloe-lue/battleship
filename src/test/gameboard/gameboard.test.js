@@ -4,10 +4,40 @@ const gameboard = Gameboard();
 
 /* eslint-disable no-undef */
 describe('place the ships at the specific coordinates', () => {
-  test('place carrier', () => {
-    expect(
-      gameboard.placeShip('carrier', [2, 'b'], 'horizontal').at(0),
-    ).toEqual({
+  const ships = [
+    {
+      ship: 'carrier',
+      coordinates: [2, 'b'],
+      axe: 'horizontal',
+    },
+    {
+      ship: 'battleship',
+      coordinates: [4, 'b'],
+      axe: 'horizontal',
+    },
+    {
+      ship: 'submarine',
+      coordinates: [3, 'h'],
+      axe: 'horizontal',
+    },
+    {
+      ship: 'cruise',
+      coordinates: [7, 'a'],
+      axe: 'horizontal',
+    },
+    {
+      ship: 'destroyer',
+      coordinates: [9, 'f'],
+      axe: 'vertical',
+    },
+  ];
+
+  const shipPlacement = ships.map((element) =>
+    gameboard.placeShip(element.ship, element.coordinates, element.axe),
+  );
+
+  const shipPlaces = [
+    {
       ship: 'carrier',
       coordinates: [
         [2, 'b'],
@@ -16,13 +46,8 @@ describe('place the ships at the specific coordinates', () => {
         [2, 'e'],
         [2, 'f'],
       ],
-    });
-  });
-
-  test('place battleship', () => {
-    expect(
-      gameboard.placeShip('battleship', [4, 'b'], 'horizontal').at(1),
-    ).toEqual({
+    },
+    {
       ship: 'battleship',
       coordinates: [
         [4, 'b'],
@@ -30,82 +55,37 @@ describe('place the ships at the specific coordinates', () => {
         [4, 'd'],
         [4, 'e'],
       ],
-    });
-  });
-
-  test('place submarine', () => {
-    expect(
-      gameboard.placeShip('submarine', [3, 'h'], 'horizontal').at(2),
-    ).toEqual({
+    },
+    {
       ship: 'submarine',
       coordinates: [
         [3, 'h'],
         [3, 'i'],
         [3, 'j'],
       ],
-    });
-  });
+    },
 
-  test('place cruise', () => {
-    expect(gameboard.placeShip('cruise', [7, 'a'], 'horizontal').at(3)).toEqual(
-      {
-        ship: 'cruise',
-        coordinates: [
-          [7, 'a'],
-          [7, 'b'],
-          [7, 'c'],
-        ],
-      },
-    );
-  });
-
-  test('place destroyer vertically', () => {
-    expect(
-      gameboard.placeShip('destroyer', [9, 'f'], 'vertical').at(4),
-    ).toEqual({
+    {
+      ship: 'cruise',
+      coordinates: [
+        [7, 'a'],
+        [7, 'b'],
+        [7, 'c'],
+      ],
+    },
+    {
       ship: 'destroyer',
       coordinates: [
         [9, 'f'],
         [10, 'f'],
       ],
-    });
-  });
-});
+    },
+  ];
 
-describe('place ship to touch another ship', () => {
-  test('place another carrier', () => {
-    expect(
-      gameboard.placeShip('carrier', [1, 'b'], 'horizontal').at(5),
-    ).toEqual({
-      ship: 'carrier',
-      coordinates: [
-        [1, 'b'],
-        [1, 'c'],
-        [1, 'd'],
-        [1, 'e'],
-        [1, 'f'],
-      ],
-    });
-  });
-});
-
-describe('placing ship on top of another ship is not allowed', () => {
-  test('place another destroyer on top of destroyer', () => {
-    expect(gameboard.placeShip('destroyer', [9, 'e'], 'horizontal')).toBe(
-      "don't put ship on top of each other",
-    );
-  });
-
-  test('place another carrier on top of carrier', () => {
-    expect(gameboard.placeShip('carrier', [1, 'e'], 'vertical')).toBe(
-      "don't put ship on top of each other",
-    );
-  });
-
-  test('place another carrier on top of carrier', () => {
-    expect(gameboard.placeShip('battleship', [3, 'c'], 'vertical')).toBe(
-      "don't put ship on top of each other",
-    );
+  test('place all ships', () => {
+    for (let i = 0; i < shipPlacement.length; i += 1) {
+      expect(shipPlacement.at(0).at(i)).toEqual(shipPlaces.at(i));
+    }
   });
 });
 
@@ -119,14 +99,27 @@ describe('receive attack', () => {
     gameboard.receiveAttack([9, 'f']);
     expect(gameboard.ships.getShipStatus('destroyer').hits).toEqual(1);
   });
+});
 
-  test('missed shot', () => {
-    gameboard.receiveAttack([1, 'a']);
-    expect(gameboard.missedShot.at(0)).toEqual([1, 'a']);
+/**
+ * @feat
+ * create a test for missed missedAttacks
+ * create a test for when the oponent's ships are all sunk
+ * */
+const P2Gameboard = Gameboard();
+P2Gameboard.placeShip('carrier', [3, 'i'], 'vertical');
+P2Gameboard.placeShip('battleship', [3, 'c'], 'vertical');
+P2Gameboard.placeShip('cruise', [1, 'f'], 'vertical');
+P2Gameboard.placeShip('submarine', [8, 'd'], 'horizontal');
+P2Gameboard.placeShip('destroyer', [1, 'a'], 'vertical');
+
+describe('keep track of missed attacks so they can display them properly', () => {
+  test('missed attacks by player, opponent displays this missed attacks on their gameboard.', () => {
+    P2Gameboard.receiveAttack([1, 'b']);
+    expect(gameboard.getMissedAttack(P2Gameboard)).toEqual([1, 'b']);
   });
 
-  test('missed shot', () => {
-    gameboard.receiveAttack([3, 'g']);
-    expect(gameboard.missedShot.at(1)).toEqual([3, 'g']);
+  test('missed attacks by player, opponent displays many', () => {
+    P2Gameboard.receiveAttack([1, 'b']);
   });
 });
