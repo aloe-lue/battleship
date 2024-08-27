@@ -1,154 +1,110 @@
-import Ships from '../ships/ships';
-
-const Gameboard = () => {
-  const shipPlace = [];
-  const ships = Ships();
-
-  const findLetter = (letters, y) => {
-    const chars = letters;
-    const vert = y;
-
-    let yAxes = 0;
-    for (let j = 0; j < chars.length; j += 1) {
-      if (vert === chars[j]) {
-        yAxes = j;
-      }
-    }
-    return yAxes;
-  };
-
-  const findNumber = (numbers, x) => {
-    const num = numbers;
-    const hort = x;
-
-    let xAxes = 0;
-    for (let k = 0; k < num.length; k += 1) {
-      if (hort === num[k]) {
-        xAxes = k;
-      }
-    }
-    return xAxes;
-  };
-
-  const shipPlacement = (ship, coordinate, axis) => {
-    const fleet = Ships();
-    const [x, y] = coordinate;
-    const shipName = ship;
-    const shipLength = fleet.ships[shipName].length;
-
-    const coordinates = [[x, y]];
-    for (let i = 1; i < shipLength; i += 1) {
-      const xy = axis;
-      const horizontal = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
-      const vertical = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-      let letterFind = findLetter(horizontal, y);
-      let numberFind = findNumber(vertical, x);
-
-      if (xy === 'horizontal') {
-        coordinates[i] = [x, horizontal[(letterFind += i)]];
-      }
-
-      if (xy === 'vertical') {
-        coordinates[i] = [vertical[(numberFind += i)], y];
-      }
-    }
-
-    return coordinates;
-  };
-
-  // ! -> you wouldn't want ship to go over the gameboard
-
-  const allowShipPlacement = (coordinate, placedShip) => {
-    const coor = coordinate;
-    const shipLocation = placedShip;
-    let allow = true;
-
-    for (let i = 0; i < coor.length; i += 1) {
-      const [x, y] = coor[i];
-
-      for (let j = 0; j < shipLocation.length; j += 1) {
-        const element = shipLocation[j].coordinates;
-
-        for (let k = 0; k < element.length; k += 1) {
-          const [a, b] = element[k];
-
-          if (x === a && y === b) {
-            allow = false;
-          }
-        }
-      }
-    }
-
-    return allow;
-  };
-
-  const placeShip = (ship, coordinate, axis) => {
-    const shipName = ship;
-    const [x, y] = coordinate;
-
-    const coordinates = shipPlacement(shipName, [x, y], axis);
-    const placeIt = allowShipPlacement(coordinates, shipPlace);
-
-    if (placeIt === true) {
-      shipPlace.push({ ship, coordinates });
-      return shipPlace;
-    }
-
-    return "don't put ship on top of each other";
-  };
-
-  const missedShot = [];
-
-  const receiveAttack = (coordinates) => {
+const GAMEBOARD = () => {
+  const increaseNum = (coordinates, shipLength) => {
+    const shipLen = shipLength;
     const [x, y] = coordinates;
-    const shipLocation = shipPlace;
+    const result = [[x, y]];
 
-    for (let i = 0; i < shipLocation.length; i += 1) {
-      const element = shipLocation[i].coordinates;
+    if (x + shipLen > 10) {
+      return null;
+    }
 
-      for (let j = 0; j < element.length; j += 1) {
-        const [a, b] = element[j];
-        const { ship } = shipLocation[i];
+    let asciiOfX = String(x).charCodeAt(0);
+    for (let i = 1; i < shipLen; i += 1) {
+      result[i] = [Number(String.fromCharCode((asciiOfX += 1))), y];
+    }
 
-        if (a === x && y === b) {
-          ships.hit(ship);
-          return ship;
-        }
+    return result;
+  };
+
+  const chooseLetter = (coordinates, shipLength) => {
+    const shipLen = shipLength;
+    const [x, y] = coordinates;
+    let result = [[x, y]];
+    let asciiOfY = y.charCodeAt(0);
+
+    for (let i = 1; i < shipLen; i += 1) {
+      result[i] = [x, String.fromCharCode((asciiOfY += 1))];
+
+      // ! I feel like there is something wrong here
+      if (asciiOfY > 74 || asciiOfY > 106) {
+        result = null;
+        return result;
       }
     }
-    missedShot.push([x, y]);
-    return ships;
+    return result;
   };
 
-  const keepTrackMissedAttack = (P2gameboard) => {
-    const missedAttacks = P2gameboard.missedShot;
-    return missedAttacks;
+  const shipPlaces = [];
+
+  const getShipCoordinates = (
+    pairOfCoordinates,
+    ship,
+    axis,
+    shipPairOfCoordinates,
+  ) => {
+    const coordinates = pairOfCoordinates;
+    const shipName = ship;
+    const axe = axis;
+    const shipsLength = {
+      carrier: 5,
+      battleship: 4,
+      cruise: 3,
+      submarine: 3,
+      destroyer: 2,
+    };
+
+    const shipLength = shipsLength[shipName];
+    if (axe === 'v') {
+      const vertical = {
+        ship: shipName,
+        coordinates: increaseNum(coordinates, shipLength),
+      };
+
+      shipPairOfCoordinates.push(vertical);
+
+      return vertical;
+    }
+    const horizontal = {
+      ship: shipName,
+      coordinates: chooseLetter(coordinates, shipLength),
+    };
+
+    shipPairOfCoordinates.push(horizontal);
+    return horizontal;
   };
 
-  const getShipSunk = (gameboard) => {
-    const oppGameboard = gameboard;
-    const allShips = [
-      'carrier',
-      'battleship',
-      'cruise',
-      'submarine',
-      'destroyer',
-    ];
-    allShips.map((element) => oppGameboard.ships.isSunk(element));
+  const handleOverlapCoordinates = () => {};
 
-    return allShips.map(
-      (element) => oppGameboard.ships.getShipStatus(element).sunk,
-    );
+  const missedShots = [];
+
+  const receiveAttack = (coordinate, shipPairOfCoordinates) => {
+    const [x, y] = coordinate;
+    const shipCoordinates = shipPairOfCoordinates;
+    let isMissed = true;
+    let shipName = '';
+
+    while (shipCoordinates.length !== 0) {
+      const { ship, coordinates } = shipCoordinates.at(0);
+
+      for (let i = 0; i < coordinates.length; i += 1) {
+        const [a, b] = coordinates[i];
+
+        if (x === a && y === b) {
+          isMissed = false;
+          shipName = ship;
+        }
+      }
+      shipCoordinates.shift();
+    }
+    return isMissed ? [x, y] : shipName;
   };
 
   return {
-    ships,
-    missedShot,
-    placeShip,
+    shipPlaces,
+    missedShots,
+    getShipCoordinates,
     receiveAttack,
-    keepTrackMissedAttack,
-    getShipSunk,
   };
 };
 
-export default Gameboard;
+export default GAMEBOARD;
