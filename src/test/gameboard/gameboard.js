@@ -2,7 +2,14 @@ import Ships from '../ships/ships';
 
 const GAMEBOARD = () => {
   const ships = Ships();
+  /**
+   * using array is unstable and when top are accessible,
+   * the top changes when accessing other array variables
+   */
+  const missedShots = new Set();
+  const shipPlaces = new Map();
 
+  // well this is tight
   // prefer keyword parameters
   const increaseNum = ({ coordinates, shipLength }) => {
     const shipLen = shipLength;
@@ -34,33 +41,25 @@ const GAMEBOARD = () => {
     return result;
   };
 
-  const shipPlaces = [];
-
   const getShipCoordinates = ({
     pairOfCoordinates,
     ship,
     axis,
-    shipPairOfCoordinates,
+    shipPlacement,
+    shipsFactory,
   }) => {
     const coordinates = pairOfCoordinates;
     const shipName = ship;
     const axe = axis;
-    const shipPlace = shipPairOfCoordinates;
-    const shipsLength = {
-      carrier: 5,
-      battleship: 4,
-      cruise: 3,
-      submarine: 3,
-      destroyer: 2,
-    };
+    const shipF = shipsFactory;
 
-    const shipLength = shipsLength[shipName];
+    const shipLength = shipF.ships[shipName].length;
     if (axe === 'v') {
       const vertical = {
         ship: shipName,
         coordinates: increaseNum({ coordinates, shipLength }),
       };
-      shipPlace.push(vertical);
+      shipPlacement.set(`${vertical.ship}`, vertical.coordinates);
 
       return vertical;
     }
@@ -69,18 +68,22 @@ const GAMEBOARD = () => {
       ship: shipName,
       coordinates: chooseLetter({ coordinates, shipLength }),
     };
-    shipPlace.push(horizontal);
+    shipPlacement.set(`${horizontal.ship}`, horizontal.coordinates);
 
     return horizontal;
   };
 
-  const missedShots = [];
-
-  const receiveAttack = ({ coordinate, shipPairOfCoordinates, missedShot }) => {
+  // changes are made to ship placement i need to change this code
+  // well this is tight
+  const receiveAttack = ({
+    coordinate,
+    shipPlacement,
+    missedShot,
+    shipFactory,
+  }) => {
     const [x, y] = coordinate;
-    const shipCoordinates = shipPairOfCoordinates;
-    let isMissed = true;
-    let shipName = '';
+    // changes are introduce at the top i need to change this
+    const shipCoordinates = shipPlacement;
 
     const coordinatesMaps = new Map();
     while (shipCoordinates.length !== 0) {
@@ -95,16 +98,18 @@ const GAMEBOARD = () => {
     }
 
     if (coordinatesMaps.has(`${x}-${y}`)) {
-      isMissed = false;
-      shipName = coordinatesMaps.get(`${x}-${y}`);
-      ships.hit(shipName);
+      // this function doesn't need isMissed = false
+      const shipName = coordinatesMaps.get(`${x}-${y}`);
+      shipFactory.hit(shipName);
       return shipName;
     }
 
-    const missed = missedShot;
-    missed.push([x, y]);
+    missedShot.push([x, y]);
     return [x, y];
   };
+
+  const keepTrackMissedAttacks = () => {};
+  const isShipAllSunk = () => {};
 
   return {
     ships,
@@ -112,6 +117,8 @@ const GAMEBOARD = () => {
     missedShots,
     getShipCoordinates,
     receiveAttack,
+    keepTrackMissedAttacks,
+    isShipAllSunk,
   };
 };
 
