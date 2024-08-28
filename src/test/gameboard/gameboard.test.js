@@ -188,3 +188,11 @@ test('report that their ships have been sunked', () => {
     gameboard.isShipAllSunk({ enemyGameboard: enemyGameboard.ships }),
   ).toBeTruthy();
 });
+
+test('gameboard should keep track of the missed attacks', () => {
+  expect(
+    enemyGameboard.keepTrackMissedAttacks({
+      enemygameboard: gameboard.missedShots,
+    }),
+  ).toEqual([3, 'b']);
+});
