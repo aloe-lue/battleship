@@ -2,15 +2,11 @@ import Ships from '../ships/ships';
 
 const GAMEBOARD = () => {
   const ships = Ships();
-  /**
-   * using array is unstable and when top are accessible,
-   * the top changes when accessing other array variables
-   */
-  const missedShots = new Set();
-  const shipPlaces = new Map();
+  const shipPlaces = [];
+  const missedShots = [];
 
-  // well this is tight
-  // prefer keyword parameters
+  const getShipPlacesAndMissedShots = () => ({ shipPlaces, missedShots });
+
   const increaseNum = ({ coordinates, shipLength }) => {
     const shipLen = shipLength;
     const [x, y] = coordinates;
@@ -20,7 +16,6 @@ const GAMEBOARD = () => {
     for (let i = 1; i < shipLen; i += 1) {
       result[i] = [Number(String.fromCharCode((asciiOfX += 1))), y];
 
-      // ascii for 10 is 49 48 doesn't work on String.fromCharCodeAt(49, 48);
       if (asciiOfX > 57) {
         result[i] = [10, y];
       }
@@ -59,7 +54,7 @@ const GAMEBOARD = () => {
         ship: shipName,
         coordinates: increaseNum({ coordinates, shipLength }),
       };
-      shipPlacement.set(`${vertical.ship}`, vertical.coordinates);
+      shipPlacement.push(vertical);
 
       return vertical;
     }
@@ -68,7 +63,7 @@ const GAMEBOARD = () => {
       ship: shipName,
       coordinates: chooseLetter({ coordinates, shipLength }),
     };
-    shipPlacement.set(`${horizontal.ship}`, horizontal.coordinates);
+    shipPlacement.push(horizontal);
 
     return horizontal;
   };
@@ -82,26 +77,27 @@ const GAMEBOARD = () => {
     shipFactory,
   }) => {
     const [x, y] = coordinate;
-    // changes are introduce at the top i need to change this
     const shipCoordinates = shipPlacement;
+    const shipsLocationTmp = [];
 
-    const coordinatesMaps = new Map();
-    while (shipCoordinates.length !== 0) {
-      const { ship, coordinates } = shipCoordinates.at(0);
+    for (let i = 0; i < shipCoordinates.length; i += 1) {
+      const { ship, coordinates } = shipCoordinates[i];
 
-      for (let i = 0; i < coordinates.length; i += 1) {
-        const [a, b] = coordinates[i];
+      for (let j = 0; j < coordinates.length; j += 1) {
+        const [a, b] = coordinates[j];
 
-        coordinatesMaps.set(`${a}-${b}`, ship);
+        shipsLocationTmp.push({ ship, pair: [a, b] });
       }
-      shipCoordinates.shift();
     }
 
-    if (coordinatesMaps.has(`${x}-${y}`)) {
-      // this function doesn't need isMissed = false
-      const shipName = coordinatesMaps.get(`${x}-${y}`);
-      shipFactory.hit(shipName);
-      return shipName;
+    for (let j = 0; j < shipsLocationTmp.length; j += 1) {
+      const { ship, pair } = shipsLocationTmp[j];
+      const [a, b] = pair;
+
+      if (a === x && b === y) {
+        shipFactory.hit(ship);
+        return ship;
+      }
     }
 
     missedShot.push([x, y]);
@@ -115,6 +111,7 @@ const GAMEBOARD = () => {
     ships,
     shipPlaces,
     missedShots,
+    getShipPlacesAndMissedShots,
     getShipCoordinates,
     receiveAttack,
     keepTrackMissedAttacks,
