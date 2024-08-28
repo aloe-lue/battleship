@@ -68,8 +68,6 @@ const GAMEBOARD = () => {
     return horizontal;
   };
 
-  // changes are made to ship placement i need to change this code
-  // well this is tight
   const receiveAttack = ({
     coordinate,
     shipPlacement,
@@ -84,9 +82,9 @@ const GAMEBOARD = () => {
       const { ship, coordinates } = shipCoordinates[i];
 
       for (let j = 0; j < coordinates.length; j += 1) {
-        const [a, b] = coordinates[j];
+        const pair = coordinates[j];
 
-        shipsLocationTmp.push({ ship, pair: [a, b] });
+        shipsLocationTmp.push({ ship, pair });
       }
     }
 
@@ -96,6 +94,7 @@ const GAMEBOARD = () => {
 
       if (a === x && b === y) {
         shipFactory.hit(ship);
+        shipFactory.isSunk(ship);
         return ship;
       }
     }
@@ -104,8 +103,26 @@ const GAMEBOARD = () => {
     return [x, y];
   };
 
-  const keepTrackMissedAttacks = () => {};
-  const isShipAllSunk = () => {};
+  const keepTrackMissedAttacks = ({ enemygameboard }) => {
+    const missedShot = enemygameboard.missedShots;
+    return missedShot;
+  };
+
+  const isShipAllSunk = ({ enemyGameboard }) => {
+    const entry = Object.entries(enemyGameboard.ships);
+    const shipsBool = [];
+
+    for (let i = 0; i < entry.length; i += 1) {
+      const element = entry[i];
+
+      for (let j = 0; j < element.length; j += 1) {
+        const { sunk } = element[j];
+        shipsBool[i] = sunk;
+      }
+    }
+
+    return !shipsBool.includes(false);
+  };
 
   return {
     ships,
