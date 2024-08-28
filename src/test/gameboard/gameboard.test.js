@@ -3,88 +3,76 @@ import Gameboard from './gameboard';
 const gameboard = Gameboard();
 
 /* eslint-disable no-undef */
-describe('place the ships at the specific coordinates', () => {
-  const ships = [
-    {
-      ship: 'carrier',
-      coordinates: [2, 'b'],
-      axe: 'horizontal',
-    },
-    {
-      ship: 'battleship',
-      coordinates: [4, 'b'],
-      axe: 'horizontal',
-    },
-    {
-      ship: 'submarine',
-      coordinates: [3, 'h'],
-      axe: 'horizontal',
-    },
-    {
-      ship: 'cruise',
-      coordinates: [7, 'a'],
-      axe: 'horizontal',
-    },
-    {
-      ship: 'destroyer',
-      coordinates: [9, 'f'],
-      axe: 'vertical',
-    },
-  ];
+const ships = [
+  // had to change it like this cuz it adds lines of codes
+  {
+    ship: 'carrier',
+    coordinates: [2, 'b'],
+    axe: 'h',
+  },
+  {
+    ship: 'battleship',
+    coordinates: [4, 'b'],
+    axe: 'h',
+  },
+  {
+    ship: 'submarine',
+    coordinates: [3, 'h'],
+    axe: 'h',
+  },
+  {
+    ship: 'cruise',
+    coordinates: [7, 'a'],
+    axe: 'h',
+  },
+  {
+    ship: 'destroyer',
+    coordinates: [9, 'f'],
+    axe: 'v',
+  },
+];
 
-  const shipPlacement = ships.map((element) =>
-    gameboard.placeShip(element.ship, element.coordinates, element.axe),
-  );
+ships.map((element) =>
+  gameboard.getShipCoordinates({
+    pairOfCoordinates: element.coordinates,
+    ship: element.ship,
+    axe: element.axe,
+    shipPlacement: gameboard.shipPlaces,
+    shipsFactory: gameboard.ships,
+  }),
+);
 
-  const shipPlaces = [
-    {
-      ship: 'carrier',
-      coordinates: [
-        [2, 'b'],
-        [2, 'c'],
-        [2, 'd'],
-        [2, 'e'],
-        [2, 'f'],
-      ],
-    },
-    {
-      ship: 'battleship',
-      coordinates: [
-        [4, 'b'],
-        [4, 'c'],
-        [4, 'd'],
-        [4, 'e'],
-      ],
-    },
-    {
-      ship: 'submarine',
-      coordinates: [
-        [3, 'h'],
-        [3, 'i'],
-        [3, 'j'],
-      ],
-    },
+test('place ships at specific coordinates', () => {
+  expect(gameboard.shipPlaces.get('battleship')).toEqual([
+    [4, 'b'],
+    [4, 'c'],
+    [4, 'd'],
+    [4, 'e'],
+  ]);
+});
 
-    {
-      ship: 'cruise',
-      coordinates: [
-        [7, 'a'],
-        [7, 'b'],
-        [7, 'c'],
-      ],
-    },
-    {
-      ship: 'destroyer',
-      coordinates: [
-        [9, 'f'],
-        [10, 'f'],
-      ],
-    },
-  ];
+test(`receiveAttack receives a pair of coordinates,
+  determines whether or not it hit a ship, 
+  if so sends the 'hit' function to the correct ship`, () => {
+  expect(
+    gameboard.receiveAttack({
+      coordinate: [4, 'b'],
+      shipPairOfCoordinates: gameboard.shipPlaces,
+      missedShot: gameboard.missedShots,
+      shipFactory: gameboard.ships,
+    }),
+  ).toBe('battleship');
 
-  test('place all ships', () => {
-    for (let i = 0; i < shipPlacement.length; i += 1) {
-      expect(shipPlacement.at(0).at(i)).toEqual(shipPlaces.at(i));
-    }
-  });
+  expect(gameboard.ships.getShipStatus('battleship').hits).toBe(1);
+
+  expect(
+    gameboard.receiveAttack({
+      coordinate: [3, 'b'],
+      shipPairOfCoordinates: gameboard.shipPlaces,
+      missedShot: gameboard.missedShots,
+      shipFactory: gameboard.ships,
+    }),
+  ).toEqual([3, 'b']);
+
+  expect(gameboard.missedShots).toEqual([[3, 'b']]);
 });
