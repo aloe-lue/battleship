@@ -1,12 +1,6 @@
 import Ships from '../ships/ships';
 
-const GAMEBOARD = () => {
-  const ships = Ships();
-  const shipPlaces = [];
-  const missedShots = [];
-
-  const getShipPlacesAndMissedShots = () => ({ shipPlaces, missedShots });
-
+const HELPERFUNCTION = () => {
   const increaseNum = ({ coordinates, shipLength }) => {
     const shipLen = shipLength;
     const [x, y] = coordinates;
@@ -35,6 +29,18 @@ const GAMEBOARD = () => {
     }
     return result;
   };
+  return {
+    increaseNum,
+    chooseLetter,
+  };
+};
+
+const helperFunc = HELPERFUNCTION();
+
+const GAMEBOARD = () => {
+  const ships = Ships();
+  const shipPlaces = [];
+  const missedShots = [];
 
   const getShipCoordinates = ({
     pairOfCoordinates,
@@ -52,7 +58,7 @@ const GAMEBOARD = () => {
     if (axe === 'v') {
       const vertical = {
         ship: shipName,
-        coordinates: increaseNum({ coordinates, shipLength }),
+        coordinates: helperFunc.increaseNum({ coordinates, shipLength }),
       };
       shipPlacement.push(vertical);
 
@@ -61,7 +67,7 @@ const GAMEBOARD = () => {
 
     const horizontal = {
       ship: shipName,
-      coordinates: chooseLetter({ coordinates, shipLength }),
+      coordinates: helperFunc.chooseLetter({ coordinates, shipLength }),
     };
     shipPlacement.push(horizontal);
 
@@ -104,6 +110,7 @@ const GAMEBOARD = () => {
   };
 
   const keepTrackMissedAttacks = ({ enemygameboard }) => {
+    // keep track means the get the last value that the user has already clicked
     const missedShot = enemygameboard.missedShots;
     return missedShot;
   };
@@ -128,10 +135,10 @@ const GAMEBOARD = () => {
     ships,
     shipPlaces,
     missedShots,
-    getShipPlacesAndMissedShots,
     getShipCoordinates,
     receiveAttack,
     keepTrackMissedAttacks,
+
     isShipAllSunk,
   };
 };
