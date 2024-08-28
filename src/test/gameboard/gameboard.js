@@ -110,9 +110,9 @@ const GAMEBOARD = () => {
   };
 
   const keepTrackMissedAttacks = ({ enemygameboard }) => {
-    // keep track means the get the last value that the user has already clicked
-    const missedShot = enemygameboard.missedShots;
-    return missedShot;
+    // this points to the latest attack commited
+    const missedShot = enemygameboard;
+    return missedShot.at(-1);
   };
 
   const isShipAllSunk = ({ enemyGameboard }) => {
@@ -138,7 +138,6 @@ const GAMEBOARD = () => {
     getShipCoordinates,
     receiveAttack,
     keepTrackMissedAttacks,
-
     isShipAllSunk,
   };
 };
