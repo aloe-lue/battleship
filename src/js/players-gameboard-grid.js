@@ -8,7 +8,7 @@ const createGrid = () => {
       asciiOfA = 97;
       num += 1;
     }
-    array[i] = `[${num}, '${String.fromCharCode(asciiOfA)}']`;
+    array[i] = `[${num}, "${String.fromCharCode(asciiOfA)}"]`;
     asciiOfA += 1;
   }
   return array;
@@ -19,7 +19,7 @@ const playersGameboardGrid = function initializeGameboard({ parent }) {
 
   for (let i = 0; i < 100; i += 1) {
     const div = document.createElement('div');
-    div.setAttribute('data-pair-coordinate', `${createGrid()[i]}`);
+    div.setAttribute('data-pair-coordinate', createGrid()[i]);
     parentDiv.appendChild(div);
   }
 
