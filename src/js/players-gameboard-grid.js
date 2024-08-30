@@ -1,0 +1,29 @@
+const createGrid = () => {
+  const array = [];
+  let asciiOfA = 97; // -> 106 ---> a b c d e f g h i j;
+  let num = 1; // -> 10 ---> 1 2 3 4 5 6 7 8 9 10;
+
+  for (let i = 0; i < 100; i += 1) {
+    if (asciiOfA > 106) {
+      asciiOfA = 97;
+      num += 1;
+    }
+    array[i] = `[${num}, '${String.fromCharCode(asciiOfA)}']`;
+    asciiOfA += 1;
+  }
+  return array;
+};
+
+const playersGameboardGrid = function initializeGameboard({ parent }) {
+  const parentDiv = document.querySelector(`${parent}`);
+
+  for (let i = 0; i < 100; i += 1) {
+    const div = document.createElement('div');
+    div.setAttribute('data-pair-coordinate', `${createGrid()[i]}`);
+    parentDiv.appendChild(div);
+  }
+
+  return parentDiv;
+};
+
+export default playersGameboardGrid;
