@@ -1,7 +1,7 @@
 import Ships from '../ships/ships';
 
 const HELPERFUNCTION = () => {
-  const increaseNum = ({ coordinates, shipLength }) => {
+  const row = ({ coordinates, shipLength }) => {
     const shipLen = shipLength;
     const [x, y] = coordinates;
     const result = [[x, y]];
@@ -18,7 +18,7 @@ const HELPERFUNCTION = () => {
     return result;
   };
 
-  const chooseLetter = ({ coordinates, shipLength }) => {
+  const column = ({ coordinates, shipLength }) => {
     const shipLen = shipLength;
     const [x, y] = coordinates;
     const result = [[x, y]];
@@ -30,8 +30,8 @@ const HELPERFUNCTION = () => {
     return result;
   };
   return {
-    increaseNum,
-    chooseLetter,
+    row,
+    column,
   };
 };
 
@@ -58,7 +58,7 @@ const GAMEBOARD = () => {
     if (axe === 'v') {
       const vertical = {
         ship: shipName,
-        coordinates: helperFunc.increaseNum({ coordinates, shipLength }),
+        coordinates: helperFunc.row({ coordinates, shipLength }),
       };
       shipPlacement.push(vertical);
 
@@ -67,7 +67,7 @@ const GAMEBOARD = () => {
 
     const horizontal = {
       ship: shipName,
-      coordinates: helperFunc.chooseLetter({ coordinates, shipLength }),
+      coordinates: helperFunc.column({ coordinates, shipLength }),
     };
     shipPlacement.push(horizontal);
 
