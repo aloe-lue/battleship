@@ -14,16 +14,19 @@ const createGrid = () => {
   return array;
 };
 
-const playersGameboardGrid = function initializeGameboard({ parent }) {
-  const parentDiv = document.querySelector(`${parent}`);
+// create 100 objects html element
 
-  for (let i = 0; i < 100; i += 1) {
+const playersGameboardGrid = ({ parentElement }) => {
+  const parent = document.querySelector(`${parentElement}`);
+  const coordinates = createGrid();
+
+  coordinates.forEach((element) => {
     const div = document.createElement('div');
-    div.setAttribute('data-pair-coordinate', createGrid()[i]);
-    parentDiv.appendChild(div);
-  }
+    div.setAttribute('data-pair-coordinate', element);
+    parent.appendChild(div);
+  });
 
-  return parentDiv;
+  return parent;
 };
 
 export default playersGameboardGrid;
