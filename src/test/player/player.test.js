@@ -11,3 +11,17 @@ describe('checks for predertermined coordinates ships placement', () => {
     expect(computersGameboard.shipPlaces.at(4).ship).toEqual('destroyer');
   });
 });
+
+test('visited length should be equal to how many set unvisited has been called', () => {
+  for (let i = 0; i < 50; i += 1) {
+    computersGameboard.setUnvisited();
+  }
+
+  expect(computersGameboard.visited.length).toEqual(50);
+});
+
+test('computers set visited should reeturn until it returns unvisited coordinate', () => {
+  expect(computersGameboard.setUnvisited()).toEqual(
+    computersGameboard.coordinates.at(-1),
+  );
+});
