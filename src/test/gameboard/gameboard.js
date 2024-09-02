@@ -4,15 +4,21 @@ const HELPERFUNCTION = () => {
   const row = ({ coordinates, shipLength }) => {
     const shipLen = shipLength;
     const [x, y] = coordinates;
-    const result = [[x, y]];
+    const result = [];
+    const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-    let asciiOfX = String(x).charCodeAt(0);
-    for (let i = 1; i < shipLen; i += 1) {
-      result[i] = [Number(String.fromCharCode((asciiOfX += 1))), y];
-
-      if (asciiOfX > 57) {
-        result[i] = [10, y];
+    // findMatch
+    let matchVal = 0;
+    for (let i = 0; i < numbers.length; i += 1) {
+      const number = numbers[i];
+      if (number === x) {
+        matchVal = i;
+        break;
       }
+    }
+
+    for (let j = 0; j < shipLen; j += 1) {
+      result[j] = [(matchVal += 1), y];
     }
 
     return result;
