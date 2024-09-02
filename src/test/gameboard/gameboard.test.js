@@ -13,7 +13,7 @@ const ships = [
   {
     ship: 'battleship',
     coordinates: [4, 'b'],
-    axe: 'h',
+    axe: 'v',
   },
   {
     ship: 'submarine',
@@ -32,15 +32,22 @@ const ships = [
   },
 ];
 
-ships.map((element) =>
+ships.forEach((element) => {
   gameboard.getShipCoordinates({
     pairOfCoordinates: element.coordinates,
     ship: element.ship,
-    axe: element.axe,
+    axis: element.axe,
     shipPlacement: gameboard.shipPlaces,
     shipsFactory: gameboard.ships,
-  }),
-);
+  });
+});
+
+test('place destroyer 9f 10f', () => {
+  expect(gameboard.shipPlaces.at(-1).coordinates).toEqual([
+    [9, 'f'],
+    [10, 'f'],
+  ]);
+});
 
 test('place ships at specific coordinates', () => {
   expect(gameboard.shipPlaces[1].coordinates).toEqual([
