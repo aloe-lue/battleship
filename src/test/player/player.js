@@ -54,7 +54,6 @@ const computersGameboard = Object.assign(GAMEBOARD(), BasicBattleshipCPU());
 const playersGameboard = GAMEBOARD();
 
 const ships = [
-  // had to change it like this cuz it adds lines of codes
   {
     ship: 'carrier',
     coordinates: [2, 'b'],
@@ -86,7 +85,7 @@ ships.map((element) =>
   playersGameboard.getShipCoordinates({
     pairOfCoordinates: element.coordinates,
     ship: element.ship,
-    axe: element.axe,
+    axis: element.axe,
     shipPlacement: playersGameboard.shipPlaces,
     shipsFactory: playersGameboard.ships,
   }),
