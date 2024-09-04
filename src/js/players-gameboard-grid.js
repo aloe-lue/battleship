@@ -14,8 +14,6 @@ const createGrid = () => {
   return array;
 };
 
-// create 100 objects html element
-
 const playersGameboardGrid = ({ parentElement }) => {
   const parent = document.querySelector(`${parentElement}`);
   const coordinates = createGrid();
@@ -29,18 +27,4 @@ const playersGameboardGrid = ({ parentElement }) => {
   return parent;
 };
 
-const addGrids = () => {
-  const playerGameBoardElement = [
-    { parentElement: '.first-gameboard-grid' },
-    { parentElement: '.second-gameboard-grid' },
-  ];
-
-  playersGameboardGrid({
-    parentElement: playerGameBoardElement.at(0).parentElement,
-  });
-
-  playersGameboardGrid({
-    parentElement: playerGameBoardElement.at(1).parentElement,
-  });
-};
-export default addGrids;
+export default playersGameboardGrid;
