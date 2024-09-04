@@ -13,7 +13,7 @@ const ships = [
   {
     ship: 'battleship',
     coordinates: [4, 'b'],
-    axe: 'v',
+    axe: 'h',
   },
   {
     ship: 'submarine',
@@ -37,8 +37,6 @@ ships.forEach((element) => {
     pairOfCoordinates: element.coordinates,
     ship: element.ship,
     axis: element.axe,
-    shipPlacement: gameboard.shipPlaces,
-    shipsFactory: gameboard.ships,
   });
 });
 
@@ -64,9 +62,6 @@ test(`receiveAttack receives a pair of coordinates,
   expect(
     gameboard.receiveAttack({
       coordinate: [4, 'b'],
-      shipPlacement: gameboard.shipPlaces,
-      missedShot: gameboard.missedShots,
-      shipFactory: gameboard.ships,
     }),
   ).toBe('battleship');
 
@@ -75,9 +70,6 @@ test(`receiveAttack receives a pair of coordinates,
   expect(
     gameboard.receiveAttack({
       coordinate: [3, 'b'],
-      shipPlacement: gameboard.shipPlaces,
-      missedShot: gameboard.missedShots,
-      shipFactory: gameboard.ships,
     }),
   ).toEqual([3, 'b']);
 
@@ -120,8 +112,6 @@ enemyShips.map((element) =>
     pairOfCoordinates: element.coordinates,
     ship: element.ship,
     axis: element.axe,
-    shipPlacement: enemyGameboard.shipPlaces,
-    shipsFactory: enemyGameboard.ships,
   }),
 );
 
@@ -140,9 +130,6 @@ test(`receiveAttack receives a pair of coordinates,
   expect(
     enemyGameboard.receiveAttack({
       coordinate: [3, 'h'],
-      shipPlacement: enemyGameboard.shipPlaces,
-      missedShot: enemyGameboard.missedShots,
-      shipFactory: enemyGameboard.ships,
     }),
   ).toEqual([3, 'h']);
 
@@ -151,9 +138,6 @@ test(`receiveAttack receives a pair of coordinates,
   expect(
     enemyGameboard.receiveAttack({
       coordinate: [3, 'b'],
-      shipPlacement: enemyGameboard.shipPlaces,
-      missedShot: enemyGameboard.missedShots,
-      shipFactory: enemyGameboard.ships,
     }),
   ).toEqual([3, 'b']);
 
@@ -184,9 +168,6 @@ test('report that their ships have been sunked', () => {
 
     enemyGameboard.receiveAttack({
       coordinate: pair,
-      shipPlacement: enemyGameboard.shipPlaces,
-      missedShot: enemyGameboard.missedShots,
-      shipFactory: enemyGameboard.ships,
     });
   }
 
