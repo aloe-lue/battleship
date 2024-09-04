@@ -48,25 +48,18 @@ const GAMEBOARD = () => {
   const shipPlaces = [];
   const missedShots = [];
 
-  const getShipCoordinates = ({
-    pairOfCoordinates,
-    ship,
-    axis,
-    shipPlacement,
-    shipsFactory,
-  }) => {
+  const getShipCoordinates = ({ pairOfCoordinates, ship, axis }) => {
     const coordinates = pairOfCoordinates;
     const shipName = ship;
     const axe = axis;
-    const shipF = shipsFactory;
 
-    const shipLength = shipF.ships[shipName].length;
+    const shipLength = ships.ships[shipName].length;
     if (axe === 'v') {
       const vertical = {
         ship: shipName,
         coordinates: helperFunc.row({ coordinates, shipLength }),
       };
-      shipPlacement.push(vertical);
+      shipPlaces.push(vertical);
 
       return vertical;
     }
@@ -75,23 +68,17 @@ const GAMEBOARD = () => {
       ship: shipName,
       coordinates: helperFunc.column({ coordinates, shipLength }),
     };
-    shipPlacement.push(horizontal);
+    shipPlaces.push(horizontal);
 
     return horizontal;
   };
 
-  const receiveAttack = ({
-    coordinate,
-    shipPlacement,
-    missedShot,
-    shipFactory,
-  }) => {
+  const receiveAttack = ({ coordinate }) => {
     const [x, y] = coordinate;
-    const shipCoordinates = shipPlacement;
     const shipsLocationTmp = [];
 
-    for (let i = 0; i < shipCoordinates.length; i += 1) {
-      const { ship, coordinates } = shipCoordinates[i];
+    for (let i = 0; i < shipPlaces.length; i += 1) {
+      const { ship, coordinates } = shipPlaces[i];
 
       for (let j = 0; j < coordinates.length; j += 1) {
         const pair = coordinates[j];
@@ -105,13 +92,13 @@ const GAMEBOARD = () => {
       const [a, b] = pair;
 
       if (a === x && b === y) {
-        shipFactory.hit(ship);
-        shipFactory.isSunk(ship);
+        ships.hit(ship);
+        ships.isSunk(ship);
         return ship;
       }
     }
 
-    missedShot.push([x, y]);
+    missedShots.push([x, y]);
     return [x, y];
   };
 
