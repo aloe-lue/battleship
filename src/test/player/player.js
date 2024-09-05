@@ -1,5 +1,23 @@
 import GAMEBOARD from '../gameboard/gameboard';
 
+// use the return value for adding a classList for an element
+const helperFunction = () => {
+  const isHit = ({ info }) => {
+    const infos = info;
+    return typeof infos === 'object';
+  };
+
+  const disableClick = ({ condition }) => {
+    if (condition) {
+      return 'disable-pointer';
+    }
+
+    return 'enable-pointer';
+  };
+
+  return { isHit, disableClick };
+};
+
 const BasicBattleshipCPU = () => {
   const visited = [];
   const coordinates = [];
@@ -24,6 +42,7 @@ const BasicBattleshipCPU = () => {
     return array;
   };
 
+  // coordinate randomizer
   const setUnvisited = () => {
     const randomNumber = getRandomNumber({ min: 0, max: 99 });
     const [x, y] = createGrid()[randomNumber];
@@ -41,11 +60,36 @@ const BasicBattleshipCPU = () => {
     return setUnvisited();
   };
 
+  const attackPlayerSquare = ({ hitInfo, status, gameboard, array = [] }) => {
+    const isMissed = hitInfo;
+    const stat = status;
+
+    if (isMissed === false) {
+      return array;
+    }
+    if (stat === true) {
+      return array;
+    }
+
+    const coordinate = setUnvisited();
+    const attackInfo = gameboard.receiveAttack({
+      coordinate,
+    });
+    const { isHit } = helperFunction();
+    const isShipMissed = isHit({ info: attackInfo });
+
+    return array.concat(
+      { coordinate, isShipMissed },
+      attackPlayerSquare({ hitInfo, gameboard, status: isShipMissed, array }),
+    );
+  };
+
   return {
     visited,
     coordinates,
     getRandomNumber,
     setUnvisited,
+    attackPlayerSquare,
   };
 };
 
@@ -86,8 +130,6 @@ ships.map((element) =>
     pairOfCoordinates: element.coordinates,
     ship: element.ship,
     axis: element.axe,
-    shipPlacement: playersGameboard.shipPlaces,
-    shipsFactory: playersGameboard.ships,
   }),
 );
 
@@ -125,9 +167,7 @@ enemyShips.map((element) =>
     pairOfCoordinates: element.coordinates,
     ship: element.ship,
     axis: element.axe,
-    shipPlacement: computersGameboard.shipPlaces,
-    shipsFactory: computersGameboard.ships,
   }),
 );
 
-export { playersGameboard, computersGameboard };
+export { playersGameboard, computersGameboard, helperFunction };
