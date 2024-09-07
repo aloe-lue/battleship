@@ -1,84 +1,79 @@
 import Ships from '../ships/ships';
 
-const HELPERFUNCTION = () => {
-  const row = ({ coordinates, shipLength }) => {
-    const shipLen = shipLength;
+const HelperFunction = () => {
+  const Row = ({ coordinates, shipLength }) => {
+    const SHIPLEN = shipLength;
     const [x, y] = coordinates;
-    const result = [];
-    const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const RESULT = [];
+    const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     // findMatch
     let matchVal = 0;
-    for (let i = 0; i < numbers.length; i += 1) {
-      const number = numbers[i];
-      if (number === x) {
+    for (let i = 0; i < NUMBERS.length; i += 1) {
+      const NUMBER = NUMBERS[i];
+      if (NUMBER === x) {
         matchVal = i;
         break;
       }
     }
 
-    for (let j = 0; j < shipLen; j += 1) {
-      result[j] = [(matchVal += 1), y];
+    for (let j = 0; j < SHIPLEN; j += 1) {
+      RESULT[j] = [(matchVal += 1), y];
     }
 
-    return result;
+    return RESULT;
   };
 
-  const column = ({ coordinates, shipLength }) => {
-    const shipLen = shipLength;
+  const Column = ({ coordinates, shipLength }) => {
+    const SHIPLEN = shipLength;
     const [x, y] = coordinates;
-    const result = [[x, y]];
+    const RESULT = [[x, y]];
     let asciiOfY = y.charCodeAt(0);
 
-    for (let i = 1; i < shipLen; i += 1) {
-      result[i] = [x, String.fromCharCode((asciiOfY += 1))];
+    for (let i = 1; i < SHIPLEN; i += 1) {
+      RESULT[i] = [x, String.fromCharCode((asciiOfY += 1))];
     }
-    return result;
+    return RESULT;
   };
+
   return {
-    row,
-    column,
+    Row,
+    Column,
   };
 };
 
-const helperFunc = HELPERFUNCTION();
+const HELPERFUNCTION = HelperFunction();
 
 const GAMEBOARD = () => {
-  const ships = Ships();
-  const shipPlaces = [];
-  const missedShots = [];
+  const SHIPS = Ships();
+  const SHIPPLACES = [];
+  const MISSEDSHOTS = [];
 
   const getShipCoordinates = ({ pairOfCoordinates, ship, axis }) => {
     const coordinates = pairOfCoordinates;
     const shipName = ship;
     const axe = axis;
 
-    const shipLength = ships.ships[shipName].length;
+    const shipLength = SHIPS.ships[shipName].length;
     if (axe === 'v') {
-      const vertical = {
+      return {
         ship: shipName,
-        coordinates: helperFunc.row({ coordinates, shipLength }),
+        coordinates: HELPERFUNCTION.Row({ coordinates, shipLength }),
       };
-      shipPlaces.push(vertical);
-
-      return vertical;
     }
 
-    const horizontal = {
+    return {
       ship: shipName,
-      coordinates: helperFunc.column({ coordinates, shipLength }),
+      coordinates: HELPERFUNCTION.Column({ coordinates, shipLength }),
     };
-    shipPlaces.push(horizontal);
-
-    return horizontal;
   };
 
   const receiveAttack = ({ coordinate }) => {
     const [x, y] = coordinate;
     const shipsLocationTmp = [];
 
-    for (let i = 0; i < shipPlaces.length; i += 1) {
-      const { ship, coordinates } = shipPlaces[i];
+    for (let i = 0; i < SHIPPLACES.length; i += 1) {
+      const { ship, coordinates } = SHIPPLACES[i];
 
       for (let j = 0; j < coordinates.length; j += 1) {
         const pair = coordinates[j];
@@ -92,13 +87,13 @@ const GAMEBOARD = () => {
       const [a, b] = pair;
 
       if (a === x && b === y) {
-        ships.hit(ship);
-        ships.isSunk(ship);
+        SHIPS.hit(ship);
+        SHIPS.isSunk(ship);
         return ship;
       }
     }
 
-    missedShots.push([x, y]);
+    MISSEDSHOTS.push([x, y]);
     return [x, y];
   };
 
@@ -125,9 +120,9 @@ const GAMEBOARD = () => {
   };
 
   return {
-    ships,
-    shipPlaces,
-    missedShots,
+    SHIPS,
+    SHIPPLACES,
+    MISSEDSHOTS,
     getShipCoordinates,
     receiveAttack,
     keepTrackMissedAttacks,
