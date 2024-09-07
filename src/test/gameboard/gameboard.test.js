@@ -6,34 +6,34 @@ const gameboard = Gameboard();
 const ships = [
   // had to change it like this cuz it adds lines of codes
   {
-    ship: 'carrier',
+    ship: 'CARRIER',
     coordinates: [2, 'b'],
-    axe: 'h',
+    axe: 'horizontal',
   },
   {
-    ship: 'battleship',
+    ship: 'BATTLESHIP',
     coordinates: [4, 'b'],
-    axe: 'h',
+    axe: 'horizontal',
   },
   {
-    ship: 'submarine',
+    ship: 'SUBMARINE',
     coordinates: [3, 'h'],
-    axe: 'h',
+    axe: 'horizontal',
   },
   {
-    ship: 'cruise',
+    ship: 'CRUISE',
     coordinates: [7, 'a'],
-    axe: 'h',
+    axe: 'horizontal',
   },
   {
-    ship: 'destroyer',
+    ship: 'DESTROYER',
     coordinates: [9, 'f'],
-    axe: 'v',
+    axe: 'vertical',
   },
 ];
 
 const SHIPPLACEMENT = ships.map((element) =>
-  gameboard.getShipCoordinates({
+  gameboard.GetShipCoordinates({
     pairOfCoordinates: element.coordinates,
     ship: element.ship,
     axis: element.axe,
@@ -45,14 +45,14 @@ SHIPPLACEMENT.forEach((ship) => {
 });
 
 test('place destroyer 9f 10f', () => {
-  expect(gameboard.SHIPPLACES.at(-1).coordinates).toEqual([
+  expect(gameboard.SHIPPLACES.at(-1).COORDINATES).toEqual([
     [9, 'f'],
     [10, 'f'],
   ]);
 });
 
 test('place ships at specific coordinates', () => {
-  expect(gameboard.SHIPPLACES[1].coordinates).toEqual([
+  expect(gameboard.SHIPPLACES[1].COORDINATES).toEqual([
     [4, 'b'],
     [4, 'c'],
     [4, 'd'],
@@ -64,14 +64,14 @@ test(`receiveAttack receives a pair of coordinates,
   determines whether or not it hit a ship, 
   if so sends the 'hit' function to the correct ship`, () => {
   expect(
-    gameboard.receiveAttack({
+    gameboard.ReceiveAttack({
       coordinate: [4, 'b'],
     }),
-  ).toBe('battleship');
+  ).toBe('BATTLESHIP');
 
-  expect(gameboard.SHIPS.getShipStatus('battleship').hits).toBe(1);
+  expect(gameboard.SHIPS.GetShipStatus({ ship: 'BATTLESHIP' }).hits).toBe(1);
   expect(
-    gameboard.receiveAttack({
+    gameboard.ReceiveAttack({
       coordinate: [3, 'b'],
     }),
   ).toEqual([3, 'b']);
@@ -82,36 +82,36 @@ test(`receiveAttack receives a pair of coordinates,
 const enemyShips = [
   // had to change it like this cuz it adds lines of codes
   {
-    ship: 'carrier',
+    ship: 'CARRIER',
     coordinates: [3, 'i'],
-    axe: 'v',
+    axe: 'vertical',
   },
   {
-    ship: 'battleship',
+    ship: 'BATTLESHIP',
     coordinates: [3, 'c'],
-    axe: 'v',
+    axe: 'vertical',
   },
   {
-    ship: 'submarine',
+    ship: 'SUBMARINE',
     coordinates: [1, 'f'],
-    axe: 'v',
+    axe: 'vertical',
   },
   {
-    ship: 'cruise',
+    ship: 'CRUISE',
     coordinates: [8, 'd'],
-    axe: 'h',
+    axe: 'horizontal',
   },
   {
-    ship: 'destroyer',
+    ship: 'DESTROYER',
     coordinates: [1, 'a'],
-    axe: 'v',
+    axe: 'vertical',
   },
 ];
 
 const enemyGameboard = Gameboard();
 
 const enemyShipsMap = enemyShips.map((element) =>
-  enemyGameboard.getShipCoordinates({
+  enemyGameboard.GetShipCoordinates({
     pairOfCoordinates: element.coordinates,
     ship: element.ship,
     axis: element.axe,
@@ -123,7 +123,7 @@ enemyShipsMap.forEach((enemyShip) => {
 });
 
 test('place ships at specific coordinates', () => {
-  expect(enemyGameboard.SHIPPLACES[1].coordinates).toEqual([
+  expect(enemyGameboard.SHIPPLACES[1].COORDINATES).toEqual([
     [3, 'c'],
     [4, 'c'],
     [5, 'c'],
@@ -135,22 +135,23 @@ test(`receiveAttack receives a pair of coordinates,
   determines whether or not it hit a ship, 
   if so sends the 'hit' function to the correct ship`, () => {
   expect(
-    enemyGameboard.receiveAttack({
+    enemyGameboard.ReceiveAttack({
       coordinate: [3, 'h'],
     }),
   ).toEqual([3, 'h']);
 
-  expect(enemyGameboard.SHIPS.getShipStatus('battleship').hits).toBe(0);
+  expect(enemyGameboard.SHIPS.GetShipStatus({ ship: 'BATTLESHIP' }).hits).toBe(
+    0,
+  );
 
   expect(
-    enemyGameboard.receiveAttack({
+    enemyGameboard.ReceiveAttack({
       coordinate: [3, 'b'],
     }),
   ).toEqual([3, 'b']);
 
   expect(enemyGameboard.MISSEDSHOTS).toEqual([
     [3, 'h'],
-
     [3, 'b'],
   ]);
 });
@@ -161,10 +162,10 @@ test('report that their ships have been sunked', () => {
   const individualCoordinates = [];
 
   for (let i = 0; i < shipsCoordinates.length; i += 1) {
-    const { coordinates } = shipsCoordinates[i];
+    const { COORDINATES } = shipsCoordinates[i];
 
-    for (let j = 0; j < coordinates.length; j += 1) {
-      const pair = coordinates[j];
+    for (let j = 0; j < COORDINATES.length; j += 1) {
+      const pair = COORDINATES[j];
       individualCoordinates.push(pair);
     }
   }
@@ -173,21 +174,15 @@ test('report that their ships have been sunked', () => {
   for (let i = 0; i < individualCoordinates.length; i += 1) {
     const pair = individualCoordinates[i];
 
-    enemyGameboard.receiveAttack({
+    enemyGameboard.ReceiveAttack({
       coordinate: pair,
     });
   }
 
-  expect(enemyGameboard.SHIPS.getShipStatus('carrier').sunk).toBeTruthy();
   expect(
-    gameboard.isShipAllSunk({ enemyGameboard: enemyGameboard.SHIPS }),
+    enemyGameboard.SHIPS.GetShipStatus({ ship: 'CARRIER' }).sunk,
   ).toBeTruthy();
-});
-
-test('gameboard should keep track of the missed attacks', () => {
   expect(
-    enemyGameboard.keepTrackMissedAttacks({
-      enemygameboard: gameboard.MISSEDSHOTS,
-    }),
-  ).toEqual([3, 'b']);
+    gameboard.IsShipAllSunk({ enemyGameboard: enemyGameboard.SHIPS }),
+  ).toBeTruthy();
 });
