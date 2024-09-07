@@ -42,91 +42,84 @@ const HelperFunction = () => {
   };
 };
 
-const HELPERFUNCTION = HelperFunction();
-
 const GAMEBOARD = () => {
   const SHIPS = Ships();
   const SHIPPLACES = [];
   const MISSEDSHOTS = [];
 
-  const getShipCoordinates = ({ pairOfCoordinates, ship, axis }) => {
-    const coordinates = pairOfCoordinates;
-    const shipName = ship;
-    const axe = axis;
+  const GetShipCoordinates = ({ pairOfCoordinates, ship, axis }) => {
+    const COORDINATE = pairOfCoordinates;
+    const SHIP = ship;
+    const AXE = axis;
 
-    const shipLength = SHIPS.ships[shipName].length;
-    if (axe === 'v') {
+    const { LENGTH } = SHIPS.SHIPS[SHIP];
+    const { Row, Column } = HelperFunction();
+    if (AXE === 'vertical') {
       return {
-        ship: shipName,
-        coordinates: HELPERFUNCTION.Row({ coordinates, shipLength }),
+        SHIP,
+        COORDINATES: Row({ coordinates: COORDINATE, shipLength: LENGTH }),
       };
     }
 
     return {
-      ship: shipName,
-      coordinates: HELPERFUNCTION.Column({ coordinates, shipLength }),
+      SHIP,
+      COORDINATES: Column({ coordinates: COORDINATE, shipLength: LENGTH }),
     };
   };
 
-  const receiveAttack = ({ coordinate }) => {
-    const [x, y] = coordinate;
-    const shipsLocationTmp = [];
+  const ReceiveAttack = ({ coordinate }) => {
+    const [X, Y] = coordinate;
+    const SHIPLOCATION = [];
 
     for (let i = 0; i < SHIPPLACES.length; i += 1) {
-      const { ship, coordinates } = SHIPPLACES[i];
+      const { SHIP, COORDINATES } = SHIPPLACES[i];
 
-      for (let j = 0; j < coordinates.length; j += 1) {
-        const pair = coordinates[j];
+      for (let j = 0; j < COORDINATES.length; j += 1) {
+        const PAIR = COORDINATES[j];
 
-        shipsLocationTmp.push({ ship, pair });
+        SHIPLOCATION.push({ SHIP, PAIR });
       }
     }
 
-    for (let j = 0; j < shipsLocationTmp.length; j += 1) {
-      const { ship, pair } = shipsLocationTmp[j];
-      const [a, b] = pair;
+    for (let j = 0; j < SHIPLOCATION.length; j += 1) {
+      const { SHIP, PAIR } = SHIPLOCATION[j];
+      const [A, B] = PAIR;
 
-      if (a === x && b === y) {
-        SHIPS.hit(ship);
-        SHIPS.isSunk(ship);
-        return ship;
+      if (A === X && B === Y) {
+        SHIPS.Hit({ ship: SHIP });
+        SHIPS.IsSunk({ ship: SHIP });
+        return SHIP;
       }
     }
 
-    MISSEDSHOTS.push([x, y]);
-    return [x, y];
+    MISSEDSHOTS.push([X, Y]);
+    return [X, Y];
   };
 
-  const keepTrackMissedAttacks = ({ enemygameboard }) => {
-    // this points to the latest attack commited
-    const missedShot = enemygameboard;
-    return missedShot.at(-1);
-  };
+  const IsShipAllSunk = ({ enemyGameboard }) => {
+    const ENTRY = Object.entries(enemyGameboard.SHIPS);
+    const SHIPSBOOL = [];
 
-  const isShipAllSunk = ({ enemyGameboard }) => {
-    const entry = Object.entries(enemyGameboard.ships);
-    const shipsBool = [];
+    for (let i = 0; i < ENTRY.length; i += 1) {
+      const ELEMENT = ENTRY[i];
 
-    for (let i = 0; i < entry.length; i += 1) {
-      const element = entry[i];
-
-      for (let j = 0; j < element.length; j += 1) {
-        const { sunk } = element[j];
-        shipsBool[i] = sunk;
+      for (let j = 0; j < ELEMENT.length; j += 1) {
+        // sunk can change that's why it's small letter
+        const { sunk } = ELEMENT[j];
+        SHIPSBOOL[i] = sunk;
       }
     }
 
-    return !shipsBool.includes(false);
+    return !SHIPSBOOL.includes(false);
   };
 
   return {
     SHIPS,
     SHIPPLACES,
     MISSEDSHOTS,
-    getShipCoordinates,
-    receiveAttack,
-    keepTrackMissedAttacks,
-    isShipAllSunk,
+    GetShipCoordinates,
+    ReceiveAttack,
+    IsShipAllSunk,
   };
 };
 
