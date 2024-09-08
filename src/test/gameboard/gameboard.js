@@ -41,7 +41,7 @@ const HelperFunction = () => {
   };
 };
 
-const GAMEBOARD = () => {
+const Gameboard = () => {
   const SHIPS = Ships();
   const SHIPPLACES = [];
   const MISSEDSHOTS = [];
@@ -122,4 +122,4 @@ const GAMEBOARD = () => {
   };
 };
 
-export default GAMEBOARD;
+export default Gameboard;
