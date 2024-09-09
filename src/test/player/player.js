@@ -1,5 +1,4 @@
 import Gameboard from '../gameboard/gameboard';
-import RandomShipsPlacement from '../generate_ship_coordinates/generate-ship-coordinates';
 
 // use the return value for adding a classList for an element
 const HelperFunction = () => {
