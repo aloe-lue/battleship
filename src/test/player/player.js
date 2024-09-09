@@ -141,24 +141,4 @@ const computersGameboard = Object.assign(Gameboard(), BasicBattleshipCPU());
 
 const playersGameboard = Gameboard();
 
-RandomShipsPlacement()
-  .SetShipsPlaces({
-    places: [],
-    placed: new Set(),
-    helperFunction: HelperFunction,
-  })
-  .forEach((coordinate) => {
-    computersGameboard.SHIPPLACES.push(coordinate);
-  });
-
-RandomShipsPlacement()
-  .SetShipsPlaces({
-    places: [],
-    placed: new Set(),
-    helperFunction: HelperFunction,
-  })
-  .forEach((coordinate) => {
-    playersGameboard.SHIPPLACES.push(coordinate);
-  });
-
 export { playersGameboard, computersGameboard, HelperFunction };
