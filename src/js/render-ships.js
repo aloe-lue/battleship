@@ -1,29 +1,29 @@
-const getShipPlaces = ({ gameboard }) => {
-  const arrayShipPlaces = gameboard.shipPlaces;
+const GetShipPlaces = ({ gameboard }) => {
+  const ARRAYSHIPPLACES = gameboard.SHIPPLACES;
 
-  const array = [];
-  for (let i = 0; i < arrayShipPlaces.length; i += 1) {
-    const { ship, coordinates } = arrayShipPlaces[i];
+  const ARRAY = [];
+  for (let i = 0; i < ARRAYSHIPPLACES.length; i += 1) {
+    const { SHIP, COORDINATES } = ARRAYSHIPPLACES[i];
 
-    for (let j = 0; j < coordinates.length; j += 1) {
-      const coordinate = coordinates[j];
-      array.push({ ship, coordinate });
+    for (let j = 0; j < COORDINATES.length; j += 1) {
+      const COORDINATE = COORDINATES[j];
+      ARRAY.push({ SHIP, COORDINATE });
     }
   }
 
-  return array;
+  return ARRAY;
 };
 
-const renderShips = ({ gameboard, gameboardElement }) => {
-  const shipPlaces = getShipPlaces({ gameboard });
+const RenderShips = ({ gameboard, gameboardElement }) => {
+  const SHIPSPLACES = GetShipPlaces({ gameboard });
 
-  shipPlaces.forEach(({ coordinate }) => {
-    const [x, y] = coordinate;
-    const element = document.querySelector(
-      `${gameboardElement} > div[data-pair-coordinate='[${x}, "${y}"]']`,
+  SHIPSPLACES.forEach(({ COORDINATE }) => {
+    const [X, Y] = COORDINATE;
+    const ELEMENT = document.querySelector(
+      `${gameboardElement} > div[data-pair-coordinate='[${X}, "${Y}"]']`,
     );
-    element.classList.add('ships');
+    ELEMENT.classList.add('ships');
   });
 };
 
-export { renderShips, getShipPlaces };
+export { RenderShips, GetShipPlaces };
