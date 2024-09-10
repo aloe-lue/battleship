@@ -136,8 +136,14 @@ const BasicBattleshipCPU = () => {
   };
 };
 
-const computersGameboard = Object.assign(Gameboard(), BasicBattleshipCPU());
+const ComputerGameboard = () => {
+  const computersGameboard = Object.assign(Gameboard(), BasicBattleshipCPU());
+  return { computersGameboard };
+};
 
-const playersGameboard = Gameboard();
+const PlayerGameboard = () => {
+  const PLAYERGAMEBOARD = Gameboard();
+  return { PLAYERGAMEBOARD };
+};
 
-export { playersGameboard, computersGameboard, HelperFunction };
+export { PlayerGameboard, ComputerGameboard, HelperFunction };
