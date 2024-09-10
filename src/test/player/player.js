@@ -142,8 +142,8 @@ const ComputerGameboard = () => {
 };
 
 const PlayerGameboard = () => {
-  const PLAYERGAMEBOARD = Gameboard();
-  return { PLAYERGAMEBOARD };
+  const playersGameboard = Gameboard();
+  return { playersGameboard };
 };
 
 export { PlayerGameboard, ComputerGameboard, HelperFunction };
