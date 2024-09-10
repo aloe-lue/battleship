@@ -168,14 +168,12 @@ body {
   display: grid;
   grid-template-columns: repeat(10, 2rem);
   grid-template-rows: repeat(10, 2rem);
-  outline: 1px solid black;
 }
 
 .second-gameboard-grid {
   display: grid;
   grid-template-columns: repeat(10, 2rem);
   grid-template-rows: repeat(10, 2rem);
-  outline: 1px solid black;
 }
 
 .first-gameboard-grid > div,
@@ -252,4 +250,96 @@ footer {
 .github-repos {
   color: darkslategrey;
   text-decoration: none;
+}
+
+/* added classlist */
+.false {
+  background-image: url(../img/hit.svg);
+}
+
+.true {
+  background-image: url(../img/missed.svg);
+}
+
+/* is for ships */
+#false {
+  background-image: url(../img/hit.svg);
+}
+
+#true {
+  background-image: url(../img/missed.svg);
+}
+
+.circle {
+  border: 1px solid gray;
+  border-radius: 50%;
+  height: 1rem;
+  width: 1rem;
+}
+
+.circles {
+  display: flex;
+  gap: 0.25rem;
+}
+
+header#header {
+  background-color: white;
+  position: relative;
+}
+
+.ships {
+  background-color: darkslategray;
+}
+
+.enable-pointer {
+  pointer-events: initial;
+  opacity: 100%;
+}
+.disable-pointer {
+  pointer-events: none;
+  opacity: 66%;
+}
+
+.announce-winner {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  background-color: gainsboro;
+  bottom: 3rem;
+  z-index: -1;
+  justify-content: space-around;
+  height: 100%;
+  align-items: center;
+  box-shadow: 0 0 5px -2px #000;
+}
+.announce-winner > button {
+  padding: 0.5rem 1rem;
+  border: 2px solid black;
+  border-radius: 0.2rem;
+  border-top-color: gray;
+  border-left-color: gray;
+  font-size: clamp(12px, 3dvw, 14px);
+  font-family: roboto;
+}
+
+.announce-winner > h2 {
+  font-family: roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: clamp(0.5rem, 5vw, 1rem);
+  color: darkslateblue;
+}
+
+.announce-winner > button:active {
+  border-color: black gray gray black;
+}
+
+.announce-winner.not-yet {
+  display: none;
+}
+
+/* show winner a pop up */
+.announce-winner.player-winner {
+  display: flex;
+  z-index: 1;
+  bottom: -3rem;
 }
