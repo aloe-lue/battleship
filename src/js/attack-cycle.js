@@ -31,26 +31,34 @@ const AttackCycles = ({
   CPUGRID.classList.toggle(`${DisableClick({ condition: ISMISSED })}`);
 
   // function that is returns random attack it's not intelligent but can be enhance
+
   const ATTACKTIME = computersGameboard.AttackPlayerSquare({
     hitInfo: ISMISSED,
     player: computersGameboard,
     gameboard: playersGameboard,
   });
 
-  // should make it so it's slow in attacking
-  ATTACKTIME.forEach((attack) => {
-    const [LEFT, RIGHT] = attack.COORDINATE;
-    const DIDIMISS = attack.ISSHIPMISSED;
+  // make use of timeout so that for every mistake it's cpu's turn to attack
+  // every cpu attack time waits 800 ms
+  setTimeout(() => {
+    // index is 0 so 0 * 800 is 0 = instant attack
+    // should make it so it's right in attacking
+    ATTACKTIME.forEach((attack, index) => {
+      setTimeout(() => {
+        const [LEFT, RIGHT] = attack.COORDINATE;
+        const DIDIMISS = attack.ISSHIPMISSED;
 
-    // application logics
-    const PLAYERSQAURE = document.querySelector(
-      `.first-gameboard-grid > div[data-pair-coordinate='[${LEFT}, "${RIGHT}"]']`,
-    );
-    PLAYERSQAURE.classList.add(`${DIDIMISS}`);
+        // application logics
+        const PLAYERSQAURE = document.querySelector(
+          `.first-gameboard-grid > div[data-pair-coordinate='[${LEFT}, "${RIGHT}"]']`,
+        );
+        PLAYERSQAURE.classList.add(`${DIDIMISS}`);
 
-    // enable player to click on the square again if cpu got missed
-    CPUGRID.classList.toggle(`${DisableClick({ condition: DIDIMISS })}`);
-  });
+        // enable player to click on the square again if cpu got missed
+        CPUGRID.classList.toggle(`${DisableClick({ condition: DIDIMISS })}`);
+      }, 800 * index);
+    });
+  }, 800);
 
   // check if computer's ships have all been sunked
   const ISSHIPALLSUNK = playersGameboard.IsShipAllSunk({
@@ -74,6 +82,7 @@ const AttackCycles = ({
     return 'Player wins 🎉';
   };
 
+  CPUGRID.classList.toggle(`${DisableClick({ condition: DIDIWIN })}`);
   const TOPNOTIF = document.querySelector('.winner');
   TOPNOTIF.textContent = GetWinner({ opponent: DIDIWIN });
 };
