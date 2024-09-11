@@ -26,10 +26,10 @@
      units="px"
      width="32px"
      inkscape:zoom="15.251403"
-     inkscape:cx="16.818125"
+     inkscape:cx="15.801825"
      inkscape:cy="15.441202"
      inkscape:window-width="1366"
-     inkscape:window-height="719"
+     inkscape:window-height="711"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
@@ -40,11 +40,12 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <circle
-       style="fill:#ff5555;stroke:#000000;stroke-width:0"
+    <ellipse
+       style="fill:#333333;stroke:#000000;stroke-width:0"
        id="path846"
-       cx="4.3184657"
-       cy="4.0691414"
-       r="2.5" />
+       cx="4.180213"
+       cy="4.1613965"
+       rx="1.2499998"
+       ry="1.2499996" />
   </g>
 </svg>
