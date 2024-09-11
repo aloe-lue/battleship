@@ -39,6 +39,7 @@ const AttackCycles = ({
   });
 
   // make use of timeout so that for every mistake it's cpu's turn to attack
+  let didIMiss;
   // every cpu attack time waits 800 ms
   setTimeout(() => {
     // index is 0 so 0 * 800 is 0 = instant attack
@@ -46,16 +47,15 @@ const AttackCycles = ({
     ATTACKTIME.forEach((attack, index) => {
       setTimeout(() => {
         const [LEFT, RIGHT] = attack.COORDINATE;
-        const DIDIMISS = attack.ISSHIPMISSED;
+        didIMiss = attack.ISSHIPMISSED;
 
-        // application logics
         const PLAYERSQAURE = document.querySelector(
           `.first-gameboard-grid > div[data-pair-coordinate='[${LEFT}, "${RIGHT}"]']`,
         );
-        PLAYERSQAURE.classList.add(`${DIDIMISS}`);
+        PLAYERSQAURE.classList.add(`${didIMiss}`);
 
+        CPUGRID.classList.toggle(`${DisableClick({ condition: didIMiss })}`);
         // enable player to click on the square again if cpu got missed
-        CPUGRID.classList.toggle(`${DisableClick({ condition: DIDIMISS })}`);
       }, 800 * index);
     });
   }, 800);
@@ -67,6 +67,7 @@ const AttackCycles = ({
 
   const WINNERNOTIF = document.querySelector('.announce-winner');
   WINNERNOTIF.classList.toggle(`${NotifWin({ sunk: ISSHIPALLSUNK })}`);
+  CPUGRID.classList.toggle(`${DisableClick({ condition: ISSHIPALLSUNK })}`);
 
   const DIDIWIN = computersGameboard.IsShipAllSunk({
     enemyGameboard: playersGameboard.SHIPS,
@@ -82,9 +83,10 @@ const AttackCycles = ({
     return 'Player wins 🎉';
   };
 
-  CPUGRID.classList.toggle(`${DisableClick({ condition: DIDIWIN })}`);
   const TOPNOTIF = document.querySelector('.winner');
   TOPNOTIF.textContent = GetWinner({ opponent: DIDIWIN });
+
+  return GetWinner({ opponent: DIDIWIN });
 };
 
 export default AttackCycles;
