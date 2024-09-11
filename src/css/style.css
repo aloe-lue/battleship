@@ -123,19 +123,211 @@ table {
   border-spacing: 0;
 }
 
+*,
+*::before,
+*::after {
+  --header-font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+    sans-serif;
+  --header-font-size: clamp(14px, 3vw, 24px);
+  --header-color: darkslategrey;
+
+  --header-display: flex;
+  --header-justify-content: center;
+  --header-align-items: center;
+  --header-border-bottom: 1px solid lightgray;
+  --header-margin-bottom: 1rem;
+
+  --body-background-color: ghostwhite;
+
+  --ship-status-display: flex;
+  --ship-status-justify-content: space-around;
+
+  --ships-display: flex;
+  --shipsgap: 1rem;
+  --ships-flex-wrap: wrap;
+
+  --opponent-ships-flex-direction: row-reverse;
+
+  --first-grid-display: grid;
+  --first-grid-grid-template-columns: repeat(10, 1.8rem);
+  --first-grid-grid-template-rows: repeat(10, 1.8rem);
+  --first-grid-gap: 0.25rem;
+
+  --second-grid-display: grid;
+  --second-grid-grid-template-columns: repeat(10, 1.8rem);
+  --second-grid-grid-template-rows: repeat(10, 1.8rem);
+  --second-grid-gap: 0.25rem;
+
+  --grid-elements-outline: 1px solid cadetblue;
+  --grid-elements-border-radius: 0.2rem;
+  --grid-elements-display: flex;
+  --grid-elements-place-content: center;
+
+  --ui-align-items: center;
+  --ui-display: flex;
+  --ui-justify-content: space-evenly;
+  --ui-flex-wrap: wrap;
+  --ui-row-gap: 2rem;
+  --ui-height: 80%;
+
+  --letters-display: grid;
+  --letters-grid-template-columns: repeat(10, 2rem);
+  --letters-justify-content: center;
+  --letters-align-items: center;
+
+  --letter-height: 2rem;
+  --letter-display: flex;
+  --letter-justify-content: center;
+  --letter-align-items: center;
+
+  --letter-font-size: clamp(12px, 3vw, 16px);
+  --letter-font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+    sans-serif;
+  --letter-color: #777777;
+
+  --numbers-display: grid;
+  --numbers-grid-template-columns: 2rem;
+
+  --number-height: 2rem;
+  --number-display: flex;
+  --number-align-items: center;
+  --number-justify-content: center;
+  --number-flex-wrap: wrap;
+  --number-font-size: clamp(12px, 3vw, 16px);
+  --number-font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+    sans-serif;
+  --number-color: #777777;
+
+  --numbers-side-position: absolute;
+  --numbers-side-left: -34px;
+
+  --gameboard-ui-position: relative;
+
+  --footer-border-top: 1px solid lightgray;
+  --footer-outline: lightgray;
+  --footer-text-align: center;
+  --footer-padding: 1rem;
+  --footer-background-color: whitesmoke;
+  --footer-font-size: clamp(12px, 3vw, 16px);
+  --footer-font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+    sans-serif;
+  --footer-color: darkslategray;
+
+  --repos-color: darkslategrey;
+  --repos-text-decoration: none;
+
+  /* added classlist */
+
+  --id-ships-background-color: white;
+  --id-ships-outline: 1px solid #00000033;
+  --id-ships-background-color: lightcoral;
+
+  --id-false-background-image: url(../img/hit.svg);
+  --id-false-background-color: lightcoral;
+
+  --id-true-background-image: url(../img/missed.svg);
+
+  --false-background-image: url(../img/hit.svg);
+  --false-background-color: lightcoral;
+
+  --true-background-image: url(../img/missed.svg);
+
+  --circle-border: 1px solid gray;
+  --circle-border-radius: 50%;
+
+  --circles-display: flex;
+  --circles-gap: 0.25rem;
+
+  --id-header-background-color: white;
+  --id-header-position: relative;
+
+  --enable-pointer-events: initial;
+  --enable-opacity: 100%;
+
+  --disable-pointer-events: none;
+  --disable-opacity: 66%;
+
+  --winner-position: absolute;
+  --winner-display: flex;
+  --winner-width: 100%;
+  --winner-background-color: gainsboro;
+  --winner-bottom: 3rem;
+  --winner-z-index: -1;
+  --winner-justify-content: space-around;
+  --winner-height: 100%;
+  --winner-align-items: center;
+  --winner-box-shadow: 0 0 5px -2px #000;
+
+  --winner-bton-padding: 0.5rem 1rem;
+  --winner-bton-border: 2px solid black;
+  --winner-bton-border-radius: 0.2rem;
+  --winner-bton-border-top-color: gray;
+  --winner-bton-border-left-color: gray;
+  --winner-bton-font-size: clamp(12px, 3dvw, 14px);
+  --winner-bton-font-family: roboto, system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
+
+  --winner-h2-font-family: roboto, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+    sans-serif;
+  --winner-h2-font-size: clamp(0.5rem, 5vw, 1rem);
+  --winner-h2-color: darkslateblue;
+
+  --winner-btn-active-border-color: black gray gray black;
+
+  --not-yet-display: none;
+
+  --hide-modal-display: none;
+
+  /* show winner a pop up */
+  --announce-winner-display: flex;
+  --announce-winner-z-index: 1;
+  --announce-winner-bottom: -3rem;
+
+  --dialog-border: 2px solid gray;
+  --dialog--box-shadow: 0px 0px 5px 1px #ffffff30;
+  --dialog-width: 320px;
+  --dialog-height: 60px;
+  --dialog-outline: 2px solid white;
+  --dialog-outline-offset: -3px;
+  --dialog-background-color: #ffffff30;
+  --dialog-border-radius: 0.75rem;
+  --dialog-color: black;
+  --dialog-display: flex;
+  --dialog-justify-content: center;
+  --dialog-align-items: center;
+
+  --start-game-font-size: clamp(14px, 5vw, 24px);
+  --start-game-font-family: roboto, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+    sans-serif;
+  --start-game-color: #0f0f3b;
+
+  --random-font-size: clamp(14px, 5vw, 24px);
+  --random-font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+    sans-serif;
+
+  --random-color: #0f0f3b;
+}
+
 h1.battleship-name {
-  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-size: clamp(14px, 3vw, 24px);
-  color: darkslategrey;
+  font-family: var(--header-font-family);
+  font-size: var(--header-font-size);
+  color: var(--header-color);
 }
 
 header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid lightgray;
-  margin-bottom: 1rem;
+  display: var(--header-display);
+  justify-content: var(--header-justify-content);
+  align-items: var(--header-align-items);
+  border-bottom: var(--header-border-bottom);
+  margin-bottom: var(--header-margin-bottom);
 }
 
 .main-content {
@@ -145,30 +337,30 @@ header {
 }
 
 body {
-  background-color: ghostwhite;
+  background-color: var(--body-background-color);
 }
 
 .players-ships-status {
-  display: flex;
-  justify-content: space-around;
+  display: var(--ship-status-display);
+  justify-content: var(--ship-status-justify-content);
 }
 
 .your-ships,
 .opponent-ships {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+  display: var(--ships-display);
+  gap: var(--shipsgap);
+  flex-wrap: var(--ships-flex-wrap);
 }
 
 .opponent-ships {
-  flex-direction: row-reverse;
+  flex-direction: var(--opponent-ships-flex-direction);
 }
 
 .first-gameboard-grid {
-  display: grid;
-  grid-template-columns: repeat(10, 1.8rem);
-  grid-template-rows: repeat(10, 1.8rem);
-  gap: 0.25rem;
+  display: var(--first-grid-display);
+  grid-template-columns: var(--first-grid-grid-template-columns);
+  grid-template-rows: var(--first-grid-grid-template-rows);
+  gap: var(--first-grid-gap);
 }
 
 .second-gameboard-grid {
@@ -180,202 +372,198 @@ body {
 
 .first-gameboard-grid > div,
 .second-gameboard-grid > div {
-  outline: 1px solid cadetblue;
-  border-radius: 0.2rem;
-  display: flex;
-  place-content: center;
+  outline: var(--grid-elements-outline);
+  border-radius: var(--grid-elements-border-radius);
+  display: var(--grid-elements-display);
+  place-content: var(--grid-elements-place-content);
 }
 .player-ui {
-  align-items: center;
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  row-gap: 2rem;
-  height: 80%;
+  align-items: var(--ui-align-items);
+  display: var(--ui-display);
+  justify-content: var(--ship-status-justify-content);
+  flex-wrap: var(--ui-flex-wrap);
+  row-gap: var(--ui-row-gap);
+  height: var(--ui-height);
 }
 
 .alphabet {
-  display: grid;
-  grid-template-columns: repeat(10, 2rem);
-  justify-content: center;
-  align-items: center;
+  display: var(--letters-display);
+  grid-template-columns: var(--letters-grid-template-columns);
+  justify-content: var(--letters-justify-content);
+  align-items: var(--letters-align-items);
 }
 
 .alphabet > div {
-  height: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: var(--letter-height);
+  display: var(--letter-display);
+  justify-content: var(--letter-justify-content);
+  align-items: var(--letter-align-items);
 
-  font-size: clamp(12px, 3vw, 16px);
-  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  color: #777777;
+  font-size: var(--letter-font-size);
+  font-family: var(--letter-font-family);
+  color: var(--letter-color);
 }
 
 .numbers {
-  display: grid;
-  grid-template-columns: 2rem;
+  display: var(--numbers-display);
+  grid-template-columns: var(--numbers-grid-template-columns);
 }
 
 .numbers > div {
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  font-size: clamp(12px, 3vw, 16px);
-  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  color: #777777;
+  height: var(--number-height);
+  display: var(--number-display);
+  align-items: var(--number-align-items);
+  justify-content: var(--number-justify-content);
+  flex-wrap: var(--number-flex-wrap);
+  font-size: var(--number-font-size);
+  font-family: var(--number-font-family);
+  color: var(--number-color);
 }
 
 .numbers-side {
-  position: absolute;
-  left: -34px;
+  position: var(--numbers-side-position);
+  left: var(--numbers-side-left);
 }
 
 .gameboard-ui {
-  position: relative;
+  position: var(--gameboard-ui-position);
 }
 
 footer {
-  border-top: 1px solid lightgray;
-  outline: lightgray;
-  text-align: center;
-  padding: 1rem;
-  background-color: whitesmoke;
-  font-size: clamp(12px, 3vw, 16px);
-  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  color: darkslategray;
+  border-top: var(--footer-border-top);
+  outline: var(--footer-outline);
+  text-align: var(--footer-text-align);
+  padding: var(--footer-padding);
+  background-color: var(--footer-background-color);
+  font-size: var(--footer-font-size);
+  font-family: var(--footer-font-family);
+  color: var(--footer-color);
 }
 
 .github-repos {
-  color: darkslategrey;
-  text-decoration: none;
+  color: var(--repos-color);
+  text-decoration: var(--repos-text-decoration);
 }
 
 /* added classlist */
 
 #ships {
-  background-color: white;
-  outline: 1px solid #00000033;
-  background-color: lightcoral;
+  outline: var(--id-ships-outline);
+  background-color: var(--id-ships-background-color);
 }
 /* is for ships */
 #false {
-  background-image: url(../img/hit.svg);
-  background-color: lightcoral;
+  background-image: var(--id-false-background-image);
+  background-color: var(--id-false-background-color);
 }
 
 #true {
-  background-image: url(../img/missed.svg);
+  background-image: var(--id-true-background-image);
 }
 
 .false {
-  background-image: url(../img/hit.svg);
-  background-color: lightcoral;
+  background-image: var(--false-background-image);
+  background-color: var(--false-background-color);
 }
 
 .true {
-  background-image: url(../img/missed.svg);
+  background-image: var(--true-background-image);
 }
 
 .circle {
-  border: 1px solid gray;
-  border-radius: 50%;
+  border: var(--circle-border);
+  border-radius: var(--circle-border-radius);
 }
 
 .circles {
-  display: flex;
-  gap: 0.25rem;
+  display: var(--circles-display);
+  gap: var(--circles-gap);
 }
 
 header#header {
-  background-color: white;
-  position: relative;
+  background-color: var(--id-header-background-color);
+  position: var(--id-header-position);
 }
 
 .enable-pointer {
-  pointer-events: initial;
-  opacity: 100%;
+  pointer-events: var(--enable-pointer-events);
+  opacity: var(--enable-opacity);
 }
 .disable-pointer {
-  pointer-events: none;
-  opacity: 66%;
+  pointer-events: var(--disable-pointer-events);
+  opacity: var(--disable-opacity);
 }
 
 .announce-winner {
-  position: absolute;
-  display: flex;
-  width: 100%;
-  background-color: gainsboro;
-  bottom: 3rem;
-  z-index: -1;
-  justify-content: space-around;
-  height: 100%;
-  align-items: center;
-  box-shadow: 0 0 5px -2px #000;
+  position: var(--winner-position);
+  display: var(--winner-display);
+  width: var(--winner-width);
+  background-color: var(--winner-background-color);
+  bottom: var(--winner-bottom);
+  z-index: var(--winner-z-index);
+  justify-content: var(--winner-justify-content);
+  height: var(--winner-height);
+  align-items: var(--winner-align-items);
+  box-shadow: var(--winner-box-shadow);
 }
 .announce-winner > button {
-  padding: 0.5rem 1rem;
-  border: 2px solid black;
-  border-radius: 0.2rem;
-  border-top-color: gray;
-  border-left-color: gray;
-  font-size: clamp(12px, 3dvw, 14px);
-  font-family: roboto;
+  padding: var(--winner-bton-padding);
+  border: var(--winner-bton-border);
+  border-radius: var(--winner-bton-border-radius);
+  border-top-color: var(--winner-bton-border-top-color);
+  border-left-color: var(--winner-bton-border-left-color);
+  font-size: var(--winner-bton-font-size);
+  font-family: var(--winner-bton-font-family);
 }
 
 .announce-winner > h2 {
-  font-family: roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-size: clamp(0.5rem, 5vw, 1rem);
-  color: darkslateblue;
+  font-family: var(--winner-h2-font-family);
+  font-size: var(--winner-h2-font-size);
+  color: var(--winner-h2-color);
 }
 
 .announce-winner > button:active {
-  border-color: black gray gray black;
+  border-color: var(--winner-btn-active-border-color);
 }
 
 .announce-winner.not-yet {
-  display: none;
+  display: var(--not-yet-display);
 }
 
 .hide-modal {
-  display: none;
+  display: var(--hide-modal-display);
 }
 
 /* show winner a pop up */
 .announce-winner.player-winner {
-  display: flex;
-  z-index: 1;
-  bottom: -3rem;
+  display: var(--announce-winner-display);
+  z-index: var(--announce-winner-z-index);
+  bottom: var(--announce-winner-bottom);
 }
 
 dialog {
-  border: 2px solid gray;
-  box-shadow: 0px 0px 5px 1px #ffffff30;
-  width: 320px;
-  height: 60px;
-  outline: 2px solid white;
-  outline-offset: -3px;
-  background-color: #ffffff30;
-  border-radius: 0.75rem;
-  color: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border: var(--dialog-border);
+  box-shadow: var(--dialog--box-shadow);
+  width: var(--dialog-width);
+  height: var(--dialog-height);
+  outline: var(--dialog-outline);
+  outline-offset: var(--dialog-outline-offset);
+  background-color: var(--dialog-background-color);
+  border-radius: var(--dialog-border-radius);
+  color: var(--dialog-color);
+  display: var(--dialog-display);
+  justify-content: var(--dialog-justify-content);
+  align-items: var(--dialog-align-items);
 }
+
 .start-game {
-  font-size: clamp(14px, 5vw, 24px);
-  font-family: roboto;
-  color: #0f0f3b;
+  font-size: var(--start-game-font-size);
+  font-family: var(--start-game-font-family);
+  color: var(--start-game-color);
 }
 
 .reposition {
-  font-size: clamp(14px, 5vw, 24px);
-  font-family: roboto;
-  color: #0f0f3b;
+  font-size: var(--random-font-size);
+  font-family: var(--random-font-family);
+  color: var(--random-color);
 }
