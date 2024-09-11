@@ -380,7 +380,7 @@ body {
 .player-ui {
   align-items: var(--ui-align-items);
   display: var(--ui-display);
-  justify-content: var(--ship-status-justify-content);
+  justify-content: var(--ui-justify-content);
   flex-wrap: var(--ui-flex-wrap);
   row-gap: var(--ui-row-gap);
   height: var(--ui-height);
