@@ -22,7 +22,7 @@ const RenderShips = ({ gameboard, gameboardElement }) => {
     const ELEMENT = document.querySelector(
       `${gameboardElement} > div[data-pair-coordinate='[${X}, "${Y}"]']`,
     );
-    ELEMENT.classList.add('ships');
+    ELEMENT.setAttribute('id', 'ships');
   });
 };
 
