@@ -25,12 +25,15 @@ const RandomShipsPlacement = () => {
 
     for (let i = 0; i < COORDINATES.length; i += 1) {
       const [X, Y] = COORDINATES[i];
-      if (X > 9) {
+
+      // previous doesn't allow 10 but now it allows until 10
+      if (X > 10) {
         overTheBoard = true;
         break;
       }
       const ASCIIOFY = Y.charCodeAt(0);
-      if (ASCIIOFY > 105) {
+      // previous doesn't allow 106 but now it allows until 106
+      if (ASCIIOFY > 106) {
         overTheBoard = true;
         break;
       }
