@@ -51,36 +51,76 @@ const HelperFunction = () => {
     return { COORDINATE, AXIS, SHIP };
   };
 
+  const GetSeparatedCoordinate = ({ SHIPHIT = [] }) => {
+    const ARRAY = SHIPHIT;
+    const NUMBER = ARRAY.map((element) => element[0]);
+    const LETTER = ARRAY.map((element) => element[1]);
+    return { NUMBER, LETTER };
+  };
+
   return {
     IsHit,
     DisableClick,
     GetRandomNumber,
     CreateGrid,
     GetRandomShipPlacement,
+    GetSeparatedCoordinate,
   };
 };
 
-const BasicBattleshipCPU = () => {
-  const VISITED = [];
-  const COORDINATES = [];
+const SmartBattleshipCPU = () => {
+  const VISITED = new Set();
+  const COORDINATES = new Set();
 
-  // coordinate randomizer
   const SetUnvisited = () => {
-    const { GetRandomNumber, CreateGrid } = HelperFunction();
-    const RANDOMNUMBER = GetRandomNumber({ min: 0, max: 99 });
-    const [x, y] = CreateGrid()[RANDOMNUMBER];
+    const { GetRandomNumber } = HelperFunction();
+    const x = GetRandomNumber({ min: 1, max: 10 });
+    const yAscii = GetRandomNumber({ min: 97, max: 106 });
+    const y = String.fromCharCode(yAscii);
 
-    if (!VISITED.includes(`${x}-${y}`)) {
-      VISITED.push(`${x}-${y}`);
-      COORDINATES.push([x, y]);
+    if (!VISITED.has(`${x}-${y}`)) {
+      VISITED.add(`${x}-${y}`);
       return [x, y];
     }
 
-    if (VISITED.length === 100) {
+    if (VISITED.size === 100) {
       return [x, y];
     }
 
     return SetUnvisited();
+  };
+
+  const GetAdjacentSlot = ({ coordinate }) => {
+    const ADJACENTSLOT = [
+      [-1, 0],
+      [0, -1],
+      [1, 0],
+      [0, 1],
+    ];
+    const [X, Y] = coordinate;
+    const ADJACENT = ADJACENTSLOT.map((element) => {
+      const [A, B] = element;
+      return [X + A, Y.charCodeAt(0) + B];
+    });
+    const FILTERADJACENT = ADJACENT.filter((element) => {
+      const [A, B] = element;
+      return A >= 1 && A <= 10 && B >= 97 && B <= 106;
+    });
+    const PROCCESSEDGOODS = FILTERADJACENT.map((element) => {
+      const [A, B] = element;
+      return [A, String.fromCharCode(B)];
+    });
+
+    return PROCCESSEDGOODS;
+  };
+
+  const GetUnvisitedAdjacencySlot = ({ array = [] }) => {
+    const ARRAY = array;
+
+    return ARRAY.filter((element) => {
+      const [X, Y] = element;
+      return !VISITED.has(`${X}-${Y}`);
+    });
   };
 
   const AttackPlayerSquare = ({
@@ -89,6 +129,7 @@ const BasicBattleshipCPU = () => {
     player,
     gameboard,
     array = [],
+    shipHit,
   }) => {
     const ISMISSED = hitInfo;
     const STAT = status;
@@ -107,13 +148,11 @@ const BasicBattleshipCPU = () => {
     if (STAT === true) {
       return array;
     }
-
+    const { IsHit } = HelperFunction();
     const COORDINATE = SetUnvisited();
     const ATTACKINFO = gameboard.ReceiveAttack({
       coordinate: COORDINATE,
     });
-
-    const { IsHit } = HelperFunction();
     const ISSHIPMISSED = IsHit({ info: ATTACKINFO });
 
     return array.concat(
@@ -124,6 +163,7 @@ const BasicBattleshipCPU = () => {
         status: ISSHIPMISSED,
         array,
         player,
+        shipHit,
       }),
     );
   };
@@ -131,13 +171,15 @@ const BasicBattleshipCPU = () => {
   return {
     VISITED,
     COORDINATES,
+    GetAdjacentSlot,
+    GetUnvisitedAdjacencySlot,
     SetUnvisited,
     AttackPlayerSquare,
   };
 };
 
 const ComputerGameboard = () => {
-  const computersGameboard = Object.assign(Gameboard(), BasicBattleshipCPU());
+  const computersGameboard = Object.assign(Gameboard(), SmartBattleshipCPU());
   return { computersGameboard };
 };
 
