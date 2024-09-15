@@ -22,6 +22,4 @@ describe('say you hit a ship you are given a chance to hit again', () => {
       [2, 'c'],
     ]);
   });
-
-  test("shouldn't hit the hit", () => {});
 });
