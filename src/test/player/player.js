@@ -90,6 +90,31 @@ const SmartBattleshipCPU = () => {
     return SetUnvisited();
   };
 
+  const SetUnvisitedAdjacentSlot = ({ array }) => {
+    const ARRAY = array;
+
+    const { GetRandomNumber } = HelperFunction();
+    const ARRAYLEN = ARRAY.length - 1;
+    const RAND = GetRandomNumber({ min: 0, max: ARRAYLEN });
+    const [X, Y] = ARRAY[RAND];
+
+    if (!VISITED.has(`${X}-${Y}`)) {
+      VISITED.add(`${X}-${Y}`);
+      return [X, Y];
+    }
+
+    const VISITEDANDUNVISITED = ARRAY.map((element) => {
+      const [A, B] = element;
+      return !VISITED.has(`${A}-${B}`);
+    });
+
+    if (!VISITEDANDUNVISITED.includes(true)) {
+      return SetUnvisited();
+    }
+
+    return SetUnvisitedAdjacentSlot({ array: ARRAY });
+  };
+
   const GetAdjacentSlot = ({ coordinate }) => {
     const ADJACENTSLOT = [
       [-1, 0],
@@ -123,6 +148,8 @@ const SmartBattleshipCPU = () => {
     });
   };
 
+  const adjacentSlots = [];
+
   const AttackPlayerSquare = ({
     hitInfo,
     status,
@@ -138,22 +165,68 @@ const SmartBattleshipCPU = () => {
       enemyGameboard: gameboard.SHIPS,
     });
 
+    // if all player ships have been sunk don't need to attack
     if (ISPLAYERSHIPSSUNK) {
       return array;
     }
 
+    // if a player hit cpu ship don't attack yet
     if (ISMISSED === false) {
       return array;
     }
+
+    // if this cpu missed don't attack yet
     if (STAT === true) {
       return array;
     }
+
     const { IsHit } = HelperFunction();
+
+    if (adjacentSlots.length !== 0) {
+      const COORDINATE = SetUnvisitedAdjacentSlot({ array: adjacentSlots });
+
+      const ATTACKINFO = gameboard.ReceiveAttack({
+        coordinate: COORDINATE,
+      });
+
+      // you want to know if you hit a ship or not this returns false if it's a hit otherwise true
+      const ISSHIPMISSED = IsHit({ info: ATTACKINFO });
+
+      // you want to store a strong references of adjacent slots
+      if (!ISSHIPMISSED) {
+        const ADJACENT = GetAdjacentSlot({ coordinate: COORDINATE });
+        const CLEANADJACENT = GetUnvisitedAdjacencySlot({ array: ADJACENT });
+        CLEANADJACENT.map((item) => adjacentSlots.push(item));
+      }
+
+      return array.concat(
+        { COORDINATE, ISSHIPMISSED },
+        AttackPlayerSquare({
+          hitInfo,
+          gameboard,
+          status: ISSHIPMISSED,
+          array,
+          player,
+          shipHit,
+        }),
+      );
+    }
+
+    // you want to attack player with random coordinate to pass for player to receive an attack
     const COORDINATE = SetUnvisited();
     const ATTACKINFO = gameboard.ReceiveAttack({
       coordinate: COORDINATE,
     });
+
+    // you want to know if you hit a ship or not this returns false if it's a hit otherwise true
     const ISSHIPMISSED = IsHit({ info: ATTACKINFO });
+
+    // you want to store a strong references of adjacent slots
+    if (!ISSHIPMISSED) {
+      const ADJACENT = GetAdjacentSlot({ coordinate: COORDINATE });
+      const CLEANADJACENT = GetUnvisitedAdjacencySlot({ array: ADJACENT });
+      CLEANADJACENT.map((item) => adjacentSlots.push(item));
+    }
 
     return array.concat(
       { COORDINATE, ISSHIPMISSED },
